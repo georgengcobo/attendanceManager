@@ -37,7 +37,7 @@ namespace Attendance.Web.Api.Services
         {
             var targetUser = await this._repo.GetUserDetailsByEmailAsync(user.Email).ConfigureAwait(false);
 
-            if (targetUser.Equals(default(User)))
+            if (targetUser.Equals(default(Teacher)))
             {
                 var msg =
                         $"User with identifier by Email: {user.Email} was not found in AuthenticateUser request";

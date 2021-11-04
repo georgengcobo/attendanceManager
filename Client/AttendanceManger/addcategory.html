@@ -1,0 +1,118 @@
+<html>
+<head>
+    <title>Fruits Add Category</title>
+ <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <script src="assets/js/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <script src="assets/js/skel.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
+    <link rel="stylesheet" type="text/css" href="assets/DataTables/datatables.min.css" />
+    <script type="text/javascript" src="assets/DataTables/datatables.min.js"></script>
+    <script src="js/security_common.js"></script>
+    <script src="js/sb-admin-2.js"></script>
+    <script src="js/menu/endpoints.js"></script>
+    <script src="js/menu/menu.js"></script>
+    <script src="js/addcategory/init.js"></script>
+   
+    <!-- Loader CSS -->
+    <style>
+        .loader {
+            position: fixed;
+            left: 0px;
+            top: 0px;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background: url('images/loadingoriginal.gif') 50% 50% no-repeat rgb(249, 249, 249);
+            opacity: .8;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="loader"></div>
+    <!-- Wrapper -->
+    <div id="wrapper">
+
+        <!-- Main -->
+        <div id="main">
+            <div class="inner">
+                <!-- Header -->
+                <header id="header">
+                    <a href="index.html" class="logo"><strong>Fruits Management Application</strong></a>
+                    <ul class="icons">
+                    </ul>
+                </header>
+                <!-- Banner -->
+                <section id="banner">
+                    <div class="content">
+                        <header>
+                        <h2>Create new Category</h2>
+                        </header>
+
+                       <form id="CreateCategoryForm">
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label" for="name">Name</label>
+                            <div class="col-lg-3">
+                                <input class="form-control" autocomplete="off"  id="name"  name="name" type="text" placeholder="Category Name" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+							<label class="col-lg-2 control-label" for="categoryCode">Code</label>
+							<div class="col-lg-3">
+                                    <input class="form-control" size="6" autocomplete="off"  id="categoryCode"  name="categoryCode" type="text" placeholder="Category Code" required>
+							</div>                  
+						</div>
+
+            
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="isActive">
+                            <label class="form-check-label" for="isActive">IsActive</label>
+                        </div>
+
+                        <br>
+                        <br>  
+
+                        <button type="submit" id="CreateCategory" class="btn btn-primary">Create Category</button>
+                        <button type="button" id="cancel" class="btn btn-default" >Cancel</button>
+
+                    </form>
+                    </div>
+                </section>
+            </div>
+        </div>
+        <!-- Sidebar -->
+        <div id="sidebar">
+            <div class="inner">
+                <!-- Search -->
+                <section id="search" class="alt">
+                    <form method="post" action="#">
+                        <input type="text" name="query" id="query" placeholder="Search" />
+                    </form>
+                </section>
+                <!-- Menu -->
+                <nav id="menu">
+
+                </nav>
+                <!-- Footer -->
+                <footer id="footer">
+                    <p class="copyright">&copy</p>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
+
+<script src="js/addcategory/validation.js"></script>
+<script src="js/addcategory/createcategory.js"></script>

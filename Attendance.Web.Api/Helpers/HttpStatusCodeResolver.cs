@@ -1,5 +1,6 @@
 ﻿using Attendance.Web.Api.Enum;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualBasic;
 
 namespace Attendance.Web.Api.Helpers
 {
@@ -24,6 +25,7 @@ namespace Attendance.Web.Api.Helpers
                 ResultCodes.UserNotFoundException => new NotFoundObjectResult(result),
                 ResultCodes.InvalidTokenException => new UnauthorizedObjectResult(result),
                 ResultCodes.DuplicateRecordException => new ConflictObjectResult(result),
+                ResultCodes.DatabaseLevelException => new UnprocessableEntityObjectResult(result),
                 _ => new OkObjectResult(result),
             };
         }

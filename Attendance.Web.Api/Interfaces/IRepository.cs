@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Attendance.Web.Api.DTO;
 using Attendance.Web.Api.Models;
 
@@ -15,7 +16,7 @@ namespace Attendance.Web.Api.Interfaces
         /// </summary>
         /// <param name="emailAddress">User Registered Email.</param>
         /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
-        public Task<User> GetUserDetailsByEmailAsync(string emailAddress);
+        public Task<Teacher> GetUserDetailsByEmailAsync(string emailAddress);
 
         /// <summary>
         /// Creates user and issues a temporary token to access the system.
@@ -94,7 +95,7 @@ namespace Attendance.Web.Api.Interfaces
         /// </summary>
         /// <param name="teacherId">Teacher Identifier.</param>
         /// <returns>returns teacher.</returns>
-        public Task<User> GetTeacherDetailsByKeyAsync(int teacherId);
+        public Task<Teacher> GetTeacherDetailsByKeyAsync(int teacherId);
 
         /// <summary>
         /// Gets attendance record.
@@ -109,5 +110,24 @@ namespace Attendance.Web.Api.Interfaces
         /// <param name="marRegister">Marks attendance record.</param>
         /// <returns>returns attendance record</returns>
         public Task<bool> AddAttendanceRecordAsync(AddAttendance marRegister);
+
+        /// <summary>
+        /// gets Attendance record.
+        /// </summary>
+        /// <param name="attendance">attendance record.</param>
+        /// <returns>returns attendance record</returns>
+        public Task<AttendanceRecord> GetAttendanceRecordAsync(AddAttendance attendance);
+
+        /// <summary>
+        /// Gets list of classes.
+        /// </summary>
+        /// <returns>returns list of classes.</returns>
+        public Task<List<Classes>> GetAllClassesAsync();
+
+        /// <summary>
+        /// Gets list of registered users.
+        /// </summary>
+        /// <returns>list of registered users.</returns>
+        public Task<List<RegisteredStudents>> GetAllRegisteredStudentsAsync(int filterByClassId = -1);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,6 @@ using Attendance.Web.Api.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Dapper;
-using Microsoft.VisualBasic.CompilerServices;
 using MySqlConnector;
 
 namespace Attendance.Web.Api.Repo
@@ -21,7 +21,6 @@ namespace Attendance.Web.Api.Repo
     public class Repository : IRepository
     {
         private readonly ILogger<Repository> _logger;
-        private readonly IConfiguration _config;
         private readonly string _sqlConfig;
         private readonly int _dbTimeout;
 
@@ -33,20 +32,19 @@ namespace Attendance.Web.Api.Repo
         public Repository(ILogger<Repository> logger, IConfiguration config)
         {
             this._logger = logger;
-            this._config = config;
             this._sqlConfig = config["ConnectionStrings:MainApp"];
             this._dbTimeout = Convert.ToInt32(config["ConnectionStrings:DBTimeOut"]);
         }
 
 
         /// <inheritdoc/>
-        public async Task<User> GetUserDetailsByEmailAsync(string emailAddress)
+        public async Task<Teacher> GetUserDetailsByEmailAsync(string emailAddress)
         {
             var queryParams = new { UserEmail = emailAddress };
             var query = $"SELECT * FROM {DatabaseTables.Database}{DatabaseTables.DbSchema}{DatabaseTables.TeachersTable} WHERE Email = @UserEmail";
 
-            var (user, _ ) =  await this.TryQueryDbAsync<User>(query, queryParams).ConfigureAwait(false);
-            return user;
+            var (user, _ ) =  await this.TryQueryDbAsync<Teacher>(query, queryParams).ConfigureAwait(false);
+            return user.FirstOrDefault();
         }
 
         /// <inheritdoc/>
@@ -81,7 +79,7 @@ namespace Attendance.Web.Api.Repo
 
             var (student, _) = await this.TryQueryDbAsync<Student>(query, parameters).ConfigureAwait(false);
 
-            return student;
+            return student.FirstOrDefault();
         }
 
         public async Task<bool> CreateNewStudentAsync(AddStudent newStudent)
@@ -139,7 +137,7 @@ namespace Attendance.Web.Api.Repo
 
             var (result, _) = await this.TryQueryDbAsync<Classes>(query, parameters).ConfigureAwait(false);
 
-            return result;
+            return result.FirstOrDefault();
         }
 
         public async Task<Classes> GetClassDetailsByIdAsync(int classId)
@@ -149,7 +147,43 @@ namespace Attendance.Web.Api.Repo
 
             var (result, _) = await this.TryQueryDbAsync<Classes>(query, parameters).ConfigureAwait(false);
 
-            return result;
+            return result.FirstOrDefault();
+        }
+
+        public async Task<List<Classes>> GetAllClassesAsync()
+        {
+            var query = $"SELECT * FROM {DatabaseTables.Database}{DatabaseTables.DbSchema}{DatabaseTables.ClassesTable}";
+
+            var (result, _) = await this.TryQueryDbAsync<Classes>(query, null).ConfigureAwait(false);
+
+            return result.ToList();
+        }
+
+        public async Task<List<RegisteredStudents>> GetAllRegisteredStudentsAsync(int filterByClassId = -1)
+        {
+            var query = new StringBuilder();
+
+            object parameters = null;
+
+            query.Append("SELECT C.ClassId, C.ClassName, C.Grade, R.RegistrationId, S.StudentId ");
+            query.AppendLine(", CONCAT(S.Name,' ' ,S.Surname)AS StudentName, S.IdNumber ");
+            query.AppendLine(", T.TeacherId, CONCAT(T.Name,' ' ,T.Surname)AS TeacherName ");
+            query.AppendLine($" FROM {DatabaseTables.Database}{DatabaseTables.DbSchema}{DatabaseTables.ClassesTable} C ");
+            query.AppendLine($" JOIN {DatabaseTables.Database}{DatabaseTables.DbSchema}{DatabaseTables.RegistrationsTable} R ");
+            query.AppendLine("ON C.ClassId =  R.ClassId ");
+            query.AppendLine($" JOIN {DatabaseTables.Database}{DatabaseTables.DbSchema}{DatabaseTables.StudentsTable} S ");
+            query.AppendLine(" ON R.StudentId = S.StudentId ");
+            query.AppendLine($" JOIN {DatabaseTables.Database}{DatabaseTables.DbSchema}{DatabaseTables.TeachersTable} T ");
+
+            if (filterByClassId != -1)
+            {
+                query.AppendLine($" WHERE  C.ClassId  = @Param1 ");
+                parameters = new { Param1 = filterByClassId };
+            }
+
+            var (result, _) = await this.TryQueryDbAsync<RegisteredStudents>(query.ToString(), parameters).ConfigureAwait(false);
+
+            return result.ToList();
         }
 
         public async Task<Student> GetStudentDetailsByKeyAsync(int studentKey)
@@ -159,7 +193,7 @@ namespace Attendance.Web.Api.Repo
 
             var (result, _) = await this.TryQueryDbAsync<Student>(query, parameters).ConfigureAwait(false);
 
-            return result;
+            return result.FirstOrDefault();
         }
 
         public async Task<Registration> GetRegistrationDetailsAsync(ClassRegistration registration)
@@ -169,7 +203,7 @@ namespace Attendance.Web.Api.Repo
 
             var (result, _) = await this.TryQueryDbAsync<Registration>(query, parameters).ConfigureAwait(false);
 
-            return result;
+            return result.FirstOrDefault();
         }
 
         public async Task<bool> CreateNewRegistrationAsync(ClassRegistration registration)
@@ -197,17 +231,44 @@ namespace Attendance.Web.Api.Repo
 
         public async Task<Registration> GetStudentRegistrationByKeyAsync(int registrationKey)
         {
-            throw new System.NotImplementedException();
+            var parameters = new { Param1 = registrationKey };
+            var query = $"SELECT * FROM {DatabaseTables.Database}{DatabaseTables.DbSchema}{DatabaseTables.RegistrationsTable} WHERE RegistrationId = @Param1";
+
+            var (result, _) = await this.TryQueryDbAsync<Registration>(query, parameters).ConfigureAwait(false);
+
+            return result.FirstOrDefault();
         }
 
-        public async Task<User> GetTeacherDetailsByKeyAsync(int teacherId)
+        public async Task<Teacher> GetTeacherDetailsByKeyAsync(int teacherId)
         {
-            throw new System.NotImplementedException();
+            var parameters = new { Param1 = teacherId };
+            var query = $"SELECT * FROM {DatabaseTables.Database}{DatabaseTables.DbSchema}{DatabaseTables.TeachersTable} WHERE TeacherId = @Param1";
+
+            var (result, _) = await this.TryQueryDbAsync<Teacher>(query, parameters).ConfigureAwait(false);
+
+            return result.FirstOrDefault();
         }
 
         public async Task<AttendanceRecord> GetAttendanceRecordDetailsAsync(AddAttendance attendance)
         {
-            throw new System.NotImplementedException();
+            var dateOfAttendance = attendance.AttendanceDate.Date.ToString("yyyy-MM-dd");
+            var parameters = new { Param1 = dateOfAttendance, Param2 = attendance.RegistrationId, Param3 = attendance.TeacherId};
+            var query = $"SELECT * FROM {DatabaseTables.Database}{DatabaseTables.DbSchema}{DatabaseTables.AttendanceTable} WHERE DATE(AttendanceDatetime) = @Param1 AND RegistrationId = @Param2 AND TeacherId = @Param3";
+
+            var (result, _) = await this.TryQueryDbAsync<AttendanceRecord>(query, parameters).ConfigureAwait(false);
+
+            return result.FirstOrDefault();
+        }
+
+        public async Task<AttendanceRecord> GetAttendanceRecordAsync(AddAttendance attendance)
+        {
+            var dateOfAttendance = attendance.AttendanceDate.Date;
+            var parameters = new { Param1 = dateOfAttendance, Param2 = attendance.RegistrationId, Param3 = attendance.TeacherId, Param4 = attendance.IsPresent };
+            var query = $"SELECT * FROM {DatabaseTables.Database}{DatabaseTables.DbSchema}{DatabaseTables.AttendanceTable} WHERE DATE(AttendanceDate) = @Param1 AND RegistrationId = @Param2 AND TeacherId = @Param3 AND IsPresent = @Param4";
+
+            var (result, _) = await this.TryQueryDbAsync<AttendanceRecord>(query, parameters).ConfigureAwait(false);
+
+            return result.FirstOrDefault();
         }
 
         public async Task<bool> AddAttendanceRecordAsync(AddAttendance marRegister)
@@ -219,15 +280,16 @@ namespace Attendance.Web.Api.Repo
             query.Append(DatabaseTables.DbSchema);
             query.Append(DatabaseTables.AttendanceTable);
             query.AppendLine(" ");
-            query.AppendLine(" (RegistrationId, TeacherId, IsPresent) ");
-            query.AppendLine(" VALUES (@Param1, @Param2, @Param3); ");
+            query.AppendLine(" (AttendanceDatetime, RegistrationId, TeacherId, IsPresent) ");
+            query.AppendLine(" VALUES (@Param1, @Param2, @Param3, @Param3); ");
             query.AppendLine(" select LAST_INSERT_ID(); ");
 
             var queryParams = new
             {
-                Param1 = marRegister.RegistrationId,
-                Param2 = marRegister.TeacherId,
-                Param3 = marRegister.IsPresent,
+                Param1 = marRegister.AttendanceDate,
+                Param2 = marRegister.RegistrationId,
+                Param3 = marRegister.TeacherId,
+                Param4 = marRegister.IsPresent,
             };
 
             var (_, resultCode) = await this.TryExecuteDbAsync<int>(query.ToString(), queryParams).ConfigureAwait(false);
@@ -250,25 +312,24 @@ namespace Attendance.Web.Api.Repo
 
         }
 
-        private async Task<(TR, ResultCodes)> TryQueryDbAsync<TR>(string query, object queryParams)
+        private async Task<(IEnumerable<TR>, ResultCodes)> TryQueryDbAsync<TR>(string query, object queryParams)
         {
             await using var db = this.ConnectToDb();
             try
             {
                 var result = await db.QueryAsync<TR>(query, queryParams, commandTimeout: this._dbTimeout).ConfigureAwait(false);
-                return (result.FirstOrDefault(), ResultCodes.OkResult);
+                return (result, ResultCodes.OkResult);
             }
             catch (Exception ex)
             {
                 this._logger.LogWarning((int)ResultCodes.DatabaseLevelException, ex.Message, ex.Source, ex.StackTrace);
-                return (default(TR), ResultCodes.DatabaseLevelException);
+                return (default(IEnumerable<TR>), ResultCodes.DatabaseLevelException);
             }
 
         }
 
         private MySqlConnection ConnectToDb()
         {
-            
             var db = new MySqlConnection(_sqlConfig);
             db.Open();
             return db;

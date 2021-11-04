@@ -2,7 +2,7 @@
 namespace Attendance.Web.Api.Models
 {
 
-    public struct User
+    public struct Teacher
     {
         public string Name { get; set; }
 

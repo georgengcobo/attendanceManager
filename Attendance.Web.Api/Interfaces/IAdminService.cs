@@ -1,6 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Attendance.Web.Api.DTO;
 using Attendance.Web.Api.Enum;
+using Attendance.Web.Api.Models;
 
 namespace Attendance.Web.Api.Interfaces
 {
@@ -34,5 +36,18 @@ namespace Attendance.Web.Api.Interfaces
         /// <param name="marRegister">new attendance record</param>
         /// <returns>marks attendance record</returns>
         public Task<(ResultCodes resultCode, string clientMessage)> CaptureAttendance(AddAttendance marRegister);
+
+        /// <summary>
+        /// Gets List of Classes.
+        /// </summary>
+        /// <returns>classes</returns>
+        public Task<(List<Classes> classes, ResultCodes resultCode, string clientMessage)> GetClass();
+
+        /// <summary>
+        /// Gets List of Classes.
+        /// </summary>
+        /// <param name="filterByClassId">filter by class</param>
+        /// <returns>registered students.</returns>
+        public Task<(List<RegisteredStudents> classes, ResultCodes resultCode, string clientMessage)>GetRegisteredStudents(int filterByClassId = -1);
     }
 }
