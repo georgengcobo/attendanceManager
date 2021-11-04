@@ -50,5 +50,11 @@
         /// </summary>
         RecordNotFoundException = 8,
 
+        /// <summary>
+        /// Operation not executed as expected.
+        /// </summary>
+        DatabaseLevelException = 9,
+
+
     }
 }

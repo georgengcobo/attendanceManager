@@ -39,8 +39,7 @@ namespace Attendance.Web.Api.Services
 
             if (targetUser.Equals(default(User)))
             {
-
-                    var msg =
+                var msg =
                         $"User with identifier by Email: {user.Email} was not found in AuthenticateUser request";
                     this._logging.LogWarning((int)ResultCodes.UserNotFoundException, msg);
                     return (null, ResultCodes.UserNotFoundException, msg);
@@ -65,7 +64,6 @@ namespace Attendance.Web.Api.Services
         {
             var (insertId, status) = await this._repo.CreateNewUserAsync(regData).ConfigureAwait(false);
 
-          
             if (insertId == -1 && status == false)
             {
                 var msg = $"User with either Email already exists, please log for Email:{regData.Email} ";
