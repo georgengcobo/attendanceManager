@@ -174,6 +174,7 @@ namespace Attendance.Web.Api.Repo
             query.AppendLine($" JOIN {DatabaseTables.Database}{DatabaseTables.DbSchema}{DatabaseTables.StudentsTable} S ");
             query.AppendLine(" ON R.StudentId = S.StudentId ");
             query.AppendLine($" JOIN {DatabaseTables.Database}{DatabaseTables.DbSchema}{DatabaseTables.TeachersTable} T ");
+            query.AppendLine(" ON C.TeacherId = T.TeacherId ");
 
             if (filterByClassId != -1)
             {

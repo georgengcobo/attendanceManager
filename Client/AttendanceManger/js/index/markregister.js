@@ -30,7 +30,7 @@ function MarkRegister(classId) {
 
         $.each(response.registeredStudents, function (index, element) {
 
-            var attendaceOptions = '<select name="'+element.registrationId+'" id="'+element.registrationId+'"><option value="1">Yes</option><option value="0">No</option></select>';
+            var attendaceOptions = '<select name="Reg_'+element.registrationId+'" id="Reg_'+element.registrationId+'"><option value="-1">?</option><option value="1">Yes</option><option value="0">No</option></select>';
    
             t.row.add([element.className, element.grade, element.studentName, element.idNumber, element.teacherName, attendaceOptions]).draw(false);
         });
