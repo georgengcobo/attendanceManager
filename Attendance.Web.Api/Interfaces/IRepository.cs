@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Attendance.Web.Api.DTO;
 using Attendance.Web.Api.Models;
+using Teacher = Attendance.Web.Api.Models.Teacher;
 
 namespace Attendance.Web.Api.Interfaces
 {
@@ -21,7 +22,7 @@ namespace Attendance.Web.Api.Interfaces
         /// <summary>
         /// Creates user and issues a temporary token to access the system.
         /// </summary>
-        /// <param name="userDetails">User Specifc information.</param>
+        /// <param name="userDetails">User specific information.</param>
         /// <returns>returns insertId if and true or false if the record was added.</returns>
         public Task<(int, bool)> CreateNewUserAsync(Register userDetails);
 
@@ -66,7 +67,7 @@ namespace Attendance.Web.Api.Interfaces
         /// </summary>
         /// <param name="studentKey">Student Db Identifier.</param>
         /// <returns>returns existing student.</returns>
-        public Task<Student> GetStudentDetailsByKeyAsync(int studentKey);
+        public Task<List<Student>> GetStudentDetailsByKeyAsync(int studentKey = -1);
 
         /// <summary>
         /// Gets Student class registration Details.
@@ -95,7 +96,7 @@ namespace Attendance.Web.Api.Interfaces
         /// </summary>
         /// <param name="teacherId">Teacher Identifier.</param>
         /// <returns>returns teacher.</returns>
-        public Task<Teacher> GetTeacherDetailsByKeyAsync(int teacherId);
+        public Task<List<Teacher>> GetTeacherDetailsByKeyAsync(int teacherId);
 
         /// <summary>
         /// Gets attendance record.
@@ -128,6 +129,6 @@ namespace Attendance.Web.Api.Interfaces
         /// Gets list of registered users.
         /// </summary>
         /// <returns>list of registered users.</returns>
-        public Task<List<RegisteredStudents>> GetAllRegisteredStudentsAsync(int filterByClassId = -1);
+        public Task<List<RegisteredStudents>> GetAllRegisteredStudentsAsync(int filterByClassId = -1, int filterByStudentId = -1);
     }
 }

@@ -159,7 +159,7 @@ namespace Attendance.Web.Api.Repo
             return result.ToList();
         }
 
-        public async Task<List<RegisteredStudents>> GetAllRegisteredStudentsAsync(int filterByClassId = -1)
+        public async Task<List<RegisteredStudents>> GetAllRegisteredStudentsAsync(int filterByClassId = -1, int filterByStudentId = -1)
         {
             var query = new StringBuilder();
 
@@ -176,10 +176,22 @@ namespace Attendance.Web.Api.Repo
             query.AppendLine($" JOIN {DatabaseTables.Database}{DatabaseTables.DbSchema}{DatabaseTables.TeachersTable} T ");
             query.AppendLine(" ON C.TeacherId = T.TeacherId ");
 
-            if (filterByClassId != -1)
+            if (filterByClassId != -1 && filterByStudentId != -1)
             {
-                query.AppendLine($" WHERE  C.ClassId  = @Param1 ");
-                parameters = new { Param1 = filterByClassId };
+                query.AppendLine($" WHERE  C.ClassId  = @Param1  AND  S.StudentId = @Param2");
+                parameters = new { Param1 = filterByClassId, @Param2 = filterByStudentId };
+            }
+
+            if (filterByClassId != -1 && filterByStudentId == -1)
+            {
+                query.AppendLine($" WHERE  C.ClassId  = @Param1");
+                parameters = new { Param1 = filterByClassId};
+            }
+
+            if (filterByClassId == -1 && filterByStudentId != -1)
+            {
+                query.AppendLine($" WHERE   S.StudentId = @Param1");
+                parameters = new { Param1 = filterByStudentId };
             }
 
             var (result, _) = await this.TryQueryDbAsync<RegisteredStudents>(query.ToString(), parameters).ConfigureAwait(false);
@@ -187,14 +199,24 @@ namespace Attendance.Web.Api.Repo
             return result.ToList();
         }
 
-        public async Task<Student> GetStudentDetailsByKeyAsync(int studentKey)
+        public async Task<List<Student>> GetStudentDetailsByKeyAsync(int studentKey = -1)
         {
-            var parameters = new { Param1 = studentKey };
-            var query = $"SELECT * FROM {DatabaseTables.Database}{DatabaseTables.DbSchema}{DatabaseTables.StudentsTable} WHERE StudentId = @Param1";
+            object parameters = null;
 
-            var (result, _) = await this.TryQueryDbAsync<Student>(query, parameters).ConfigureAwait(false);
+            var query = new StringBuilder();
 
-            return result.FirstOrDefault();
+            query.Append($"SELECT * FROM {DatabaseTables.Database}{DatabaseTables.DbSchema}{DatabaseTables.StudentsTable} ");
+
+            if (studentKey != -1)
+            {
+                query.AppendLine(" WHERE StudentId = @Param1 ");
+
+                parameters = new { Param1 = studentKey };
+            }
+
+            var (result, _) = await this.TryQueryDbAsync<Student>(query.ToString(), parameters).ConfigureAwait(false);
+
+            return result.ToList();
         }
 
         public async Task<Registration> GetRegistrationDetailsAsync(ClassRegistration registration)
@@ -240,14 +262,21 @@ namespace Attendance.Web.Api.Repo
             return result.FirstOrDefault();
         }
 
-        public async Task<Teacher> GetTeacherDetailsByKeyAsync(int teacherId)
+        public async Task<List<Teacher>> GetTeacherDetailsByKeyAsync(int teacherId = -1)
         {
-            var parameters = new { Param1 = teacherId };
-            var query = $"SELECT * FROM {DatabaseTables.Database}{DatabaseTables.DbSchema}{DatabaseTables.TeachersTable} WHERE TeacherId = @Param1";
+            object parameters = null;
+            var query = new StringBuilder();
+            query.Append($"SELECT * FROM {DatabaseTables.Database}{DatabaseTables.DbSchema}{DatabaseTables.TeachersTable} ");
 
-            var (result, _) = await this.TryQueryDbAsync<Teacher>(query, parameters).ConfigureAwait(false);
 
-            return result.FirstOrDefault();
+            if (teacherId != -1)
+            {
+                query.AppendLine(" WHERE TeacherId = @Param1 ");
+                parameters = new { Param1 = teacherId };
+            }
+            var (result, _) = await this.TryQueryDbAsync<Teacher>(query.ToString(), parameters).ConfigureAwait(false);
+
+            return result.ToList();
         }
 
         public async Task<AttendanceRecord> GetAttendanceRecordDetailsAsync(AddAttendance attendance)

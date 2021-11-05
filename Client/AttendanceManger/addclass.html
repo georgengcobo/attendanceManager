@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>Fruits Add Category</title>
+    <title>Create New Class</title>
  <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <script src="assets/js/jquery.min.js"></script>
@@ -17,7 +17,7 @@
     <script src="js/sb-admin-2.js"></script>
     <script src="js/menu/endpoints.js"></script>
     <script src="js/menu/menu.js"></script>
-    <script src="js/addcategory/init.js"></script>
+    <script src="js/addclass/init.js"></script>
    
     <!-- Loader CSS -->
     <style>
@@ -45,7 +45,7 @@
             <div class="inner">
                 <!-- Header -->
                 <header id="header">
-                    <a href="index.html" class="logo"><strong>Fruits Management Application</strong></a>
+                    <a href="index.html" class="logo"><strong>Attendance Management Application</strong></a>
                     <ul class="icons">
                     </ul>
                 </header>
@@ -53,35 +53,40 @@
                 <section id="banner">
                     <div class="content">
                         <header>
-                        <h2>Create new Category</h2>
+                        <h2>Create new Class</h2>
                         </header>
 
-                       <form id="CreateCategoryForm">
+                       <form id="CreateClassForm">
 
                         <div class="form-group">
-                            <label class="col-lg-2 control-label" for="name">Name</label>
+                            <label class="col-lg-2 control-label" for="name">Classe Name</label>
                             <div class="col-lg-3">
-                                <input class="form-control" autocomplete="off"  id="name"  name="name" type="text" placeholder="Category Name" required>
+                                <input class="form-control" autocomplete="off"  id="name"  name="name" type="text" placeholder="class Name" required>
                             </div>
                         </div>
 
                         <div class="form-group">
-							<label class="col-lg-2 control-label" for="categoryCode">Code</label>
-							<div class="col-lg-3">
-                                    <input class="form-control" size="6" autocomplete="off"  id="categoryCode"  name="categoryCode" type="text" placeholder="Category Code" required>
+							<label class="col-lg-2 control-label" for="grade">Grade</label>
+							<div class="col-lg-2">
+                                    <input class="form-control" size="6" autocomplete="off"  id="grade"  name="grade" type="text" placeholder="grade" required>
 							</div>                  
 						</div>
 
-            
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="isActive">
-                            <label class="form-check-label" for="isActive">IsActive</label>
+                        <div class="form-group">
+                        
+                            <label class="col-lg-2 control-label" for="teacher">Teacher</label>
+                            <div class="col-lg-2">
+                                <select class="form-control" name="teacher" id="teacher" placeholder="teacher" required>
+                                     <option disabled selected value="-1"> -- Select Teacher -- </option>
+                                </select>
+                            </div>
+
                         </div>
 
                         <br>
                         <br>  
 
-                        <button type="submit" id="CreateCategory" class="btn btn-primary">Create Category</button>
+                        <button type="submit" id="createclass" class="btn btn-primary">Create Class</button>
                         <button type="button" id="cancel" class="btn btn-default" >Cancel</button>
 
                     </form>
@@ -114,5 +119,5 @@
 
 </html>
 
-<script src="js/addcategory/validation.js"></script>
-<script src="js/addcategory/createcategory.js"></script>
+<script src="js/addclass/validation.js"></script>
+<script src="js/addclass/createcategory.js"></script>

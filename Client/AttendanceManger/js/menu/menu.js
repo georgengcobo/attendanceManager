@@ -6,13 +6,16 @@ $(document).ready(function () {
     menuOptions += '</header>';
     menuOptions += '<ul>';
     menuOptions += '<li>';
-    menuOptions += '<a href="index.html" title="Classes"><img src="./images/icons/essen/32/home.png"/>Classes</a></div>';
+    menuOptions += '<a href="index.html" title="Classes"><img src="./images/icons/essen/32/calendar.png"/> Attendance</a></div>';
     menuOptions += '</li>';
     menuOptions += '<li>';
-    menuOptions += '<a href="addproduct.html" title="addProduct"><img src="./images/icons/essen/32/shipping.png"/>Add Product</a> </div>';
+    menuOptions += '<a href="addstudent.html" title="Register a new studen"><img src="./images/icons/essen/32/hire-me.png"/> Register Student</a> </div>';
     menuOptions += '</li>';
     menuOptions += '<li>';
-    menuOptions += '<a href="addcategory.html" title="AddCategory"><img src="./images/icons/essen/32/milestone.png"/>Add Category</a> </div>';
+    menuOptions += '<a href="addclass.html" title="Create a new class to teach"><img src="./images/icons/essen/32/document-library.png"/> Create Class</a> </div>';
+    menuOptions += '</li>';
+    menuOptions += '<li>';
+    menuOptions += '<a href="enrollstudent.html" title="Enroll student into a class"><img src="./images/icons/essen/32/special-offer.png"/> Enroll in Class</a> </div>';
     menuOptions += '</li>';
     menuOptions += '</ul>';
 

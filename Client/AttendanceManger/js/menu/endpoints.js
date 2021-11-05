@@ -1,24 +1,23 @@
 window.onload = function() {
     sessionStorage.setItem("EndPointsUpdateFlag", true);
 
-    var EP = sessionStorage.getItem("EndPoints");
-    var Es = sessionStorage.getItem("EndPointsUpdateFlag");
-
     if (sessionStorage.getItem("EndPoints") === null || sessionStorage.getItem("EndPointsUpdateFlag") == "true") {
         console.log("Loading Endpoints into memory");
 
-        var baseUrl = "https://localhost";
-        var portNumber = ":44391";
-        var subDomain = "";
-        var api = "/api"
-        var addUser = "/User/RegisterUser";
-        var login = "/User/Authenticate"
-        var getClasses = "/Admin/Classes";
-        var getRegisteredStudents = "/Admin/RegisteredStudents/";
-        var addStudent = "/Admin/AddStudent";
-        var addClass = "/Admin/AddClass";
-        var enrollStudent = "/Admin/EnrollClass";
-        var recordAttendance = "/Admin/RecordAttendance";
+        const baseUrl = "https://localhost";
+        const portNumber = ":44391";
+        const subDomain = "";
+        const api = "/api"
+        const addUser = "/User/RegisterUser";
+        const login = "/User/Authenticate"
+        const getClasses = "/Admin/Classes";
+        const getRegisteredStudents = `/Admin/Registrations/Classes/${classId}/Student/${StudentId}`;
+        const addStudent = "/Admin/AddStudent";
+        const addClass = "/Admin/AddClass";
+        const enrollStudent = "/Admin/EnrollClass";
+        const recordAttendance = "/Admin/RecordAttendance";
+        const getTeachers = `/Admin/Teachers/${teacherId}`;
+        const getStudents = `/Admin/Students/${StudentId}`;
         var endpointDictionary = {};
         // map menu items to json object here
         endpointDictionary["BaseUrl"] = baseUrl;
@@ -29,7 +28,6 @@ window.onload = function() {
         endpointDictionary["POST_AddUser"] = addUser;
         endpointDictionary["POST_LogIn"] = login;
         endpointDictionary["GET_Classes"] = getClasses;
-        endpointDictionary["GET_RegisteredStudents"] = getRegisteredStudents;
         endpointDictionary["POST_AddStudent"] = addStudent;
         endpointDictionary["POST_AddClass"] = addClass;
         endpointDictionary["POST_EnrollStudent"] = enrollStudent;
@@ -46,6 +44,10 @@ function GenerateEndpoint(enpoint) {
     var baseUrl = jsonEndpoint["BaseUri"]
 
     var destEndpoint = jsonEndpoint[enpoint];
+    if (destEndpoint == baseUrl){
+
+        return baseUrl;
+    }
     if (destEndpoint) {
 
         var url = baseUrl + destEndpoint;

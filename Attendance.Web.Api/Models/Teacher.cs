@@ -14,7 +14,7 @@ namespace Attendance.Web.Api.Models
 
         public DateTime RegisteredTime { get; set; }
 
-        public int UserId { get; set; }
+        public int TeacherId { get; set; }
 
     }
 }

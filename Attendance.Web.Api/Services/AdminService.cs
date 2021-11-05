@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Attendance.Web.Api.DTO;
 using Attendance.Web.Api.Enum;
 using Attendance.Web.Api.Interfaces;
 using Attendance.Web.Api.Models;
 using Microsoft.Extensions.Logging;
+using TeacherResponse = Attendance.Web.Api.DTO.TeacherResponse;
 
 namespace Attendance.Web.Api.Services
 {
@@ -19,7 +21,7 @@ namespace Attendance.Web.Api.Services
             this._logging = logging;
         }
 
-        public async Task<(ResultCodes resultCode, string clientMessage)> AddStudent(AddStudent newStudent)
+        public async Task<(ResultCodes resultCode, string clientMessage)> AddStudentAsync(AddStudent newStudent)
         {
             var targetStudent = await this._repo.GetStudentDetailsByIdNumberAsync(newStudent.IdNumber).ConfigureAwait(false);
 
@@ -36,13 +38,13 @@ namespace Attendance.Web.Api.Services
 
         }
 
-        public async Task<(ResultCodes resultCode, string clientMessage)> AddClass(AddClass newClass)
+        public async Task<(ResultCodes resultCode, string clientMessage)> AddClassAsync(AddClass newClass)
         {
             var targetClass = await this._repo.GetClassDetailsAsync(newClass).ConfigureAwait(false);
 
             var targetTeacher = await this._repo.GetTeacherDetailsByKeyAsync(newClass.TeacherId).ConfigureAwait(false);
 
-            if (targetTeacher.Equals(default(Teacher)))
+            if (targetTeacher.FirstOrDefault().Equals(default(Teacher)))
             {
 
                 this._logging.LogWarning((int)ResultCodes.UserNotFoundException, "Specified Teacher does not exists");
@@ -61,14 +63,14 @@ namespace Attendance.Web.Api.Services
             return (ResultCodes.DuplicateRecordException, msg);
         }
 
-        public async Task<(ResultCodes resultCode, string clientMessage)> RegisterInClass(ClassRegistration newRegistrations)
+        public async Task<(ResultCodes resultCode, string clientMessage)> RegisterInClassAsync(ClassRegistration newRegistrations)
         {
             var targetClass = await this._repo.GetClassDetailsByIdAsync(newRegistrations.ClassId).ConfigureAwait(false);
-            var targetStudent = await this._repo.GetStudentDetailsByKeyAsync(newRegistrations.StudentId).ConfigureAwait(false);
+            var students = await this._repo.GetStudentDetailsByKeyAsync(newRegistrations.StudentId).ConfigureAwait(false);
+            var targetStudent = students.FirstOrDefault();
 
             if (targetClass.Equals(default(Classes)) || targetStudent.Equals(default(Student)))
             {
-
                 return (ResultCodes.RecordNotFoundException, "Student record or class record not found on the System");
             }
 
@@ -87,10 +89,11 @@ namespace Attendance.Web.Api.Services
             return result ? (ResultCodes.OkResult, "Student registered for class") : (ResultCodes.UnexpectedOperationException, "Error creating Registration in database");
         }
 
-        public async Task<(ResultCodes resultCode, string clientMessage)> CaptureAttendance(AddAttendance marRegister)
+        public async Task<(ResultCodes resultCode, string clientMessage)> CaptureAttendanceAsync(AddAttendance marRegister)
         {
             var targetRegistration = await this._repo.GetStudentRegistrationByKeyAsync(marRegister.RegistrationId).ConfigureAwait(false);
-            var targetTeacher = await this._repo.GetTeacherDetailsByKeyAsync(marRegister.TeacherId).ConfigureAwait(false);
+            var targetTeachers = await this._repo.GetTeacherDetailsByKeyAsync(marRegister.TeacherId).ConfigureAwait(false);
+            var targetTeacher = targetTeachers.FirstOrDefault();
 
             if (targetTeacher.Equals(default(Teacher)) || targetRegistration.Equals(default(Registration)))
             {
@@ -112,16 +115,32 @@ namespace Attendance.Web.Api.Services
             return (ResultCodes.DuplicateRecordException, "Student attendance already marked for class");
         }
 
-        public async Task<(List<Classes> classes, ResultCodes resultCode, string clientMessage)> GetClass()
+        public async Task<(List<Classes> classes, ResultCodes resultCode, string clientMessage)> GetClassAsync()
         {
             var result = await this._repo.GetAllClassesAsync().ConfigureAwait(false);
 
             return (result, ResultCodes.OkResult, "OK");
         }
 
-        public async Task<(List<RegisteredStudents> classes, ResultCodes resultCode, string clientMessage)> GetRegisteredStudents(int filterByClassId = -1)
+        public async Task<(List<RegisteredStudents> classes, ResultCodes resultCode, string clientMessage)> GetRegisteredStudentsAsync(int filterByClassId = -1, int filterStudentId = -1)
         {
-            var result = await this._repo.GetAllRegisteredStudentsAsync(filterByClassId).ConfigureAwait(false);
+            var result = await this._repo.GetAllRegisteredStudentsAsync(filterByClassId, filterStudentId).ConfigureAwait(false);
+
+            return (result, ResultCodes.OkResult, "Ok");
+        }
+
+        public async Task<(List<TeacherResponse> classes, ResultCodes resultCode, string clientMessage)> GetTeachersAsync(int teacherId = -1)
+        {
+            var result = await this._repo.GetTeacherDetailsByKeyAsync(teacherId).ConfigureAwait(false);
+
+            var teachers = result.Select(teacher => new TeacherResponse() {FullName = $"{teacher.Name} {teacher.Surname}", TeacherId = teacher.TeacherId}).ToList();
+
+            return (teachers, ResultCodes.OkResult, "Ok");
+        }
+
+        public async Task<(List<Student> classes, ResultCodes resultCode, string clientMessage)> GetStudentsAsync(int studentId = -1)
+        {
+            var result = await this._repo.GetStudentDetailsByKeyAsync(studentId).ConfigureAwait(false);
 
             return (result, ResultCodes.OkResult, "Ok");
         }

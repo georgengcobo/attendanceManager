@@ -23,7 +23,6 @@ C:\Users\George Ngcobo\source\repos\AttendanceRegister\Attendance.Web.Api\bin\De
 C:\Users\George Ngcobo\source\repos\AttendanceRegister\Attendance.Web.Api\bin\Debug\net5.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\George Ngcobo\source\repos\AttendanceRegister\Attendance.Web.Api\bin\Debug\net5.0\Swashbuckle.AspNetCore.SwaggerUI.dll
 C:\Users\George Ngcobo\source\repos\AttendanceRegister\Attendance.Web.Api\bin\Debug\net5.0\System.IdentityModel.Tokens.Jwt.dll
-C:\Users\George Ngcobo\source\repos\AttendanceRegister\Attendance.Web.Api\obj\Debug\net5.0\Attendance.Web.Api.csproj.AssemblyReference.cache
 C:\Users\George Ngcobo\source\repos\AttendanceRegister\Attendance.Web.Api\obj\Debug\net5.0\Attendance.Web.Api.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\George Ngcobo\source\repos\AttendanceRegister\Attendance.Web.Api\obj\Debug\net5.0\Attendance.Web.Api.AssemblyInfoInputs.cache
 C:\Users\George Ngcobo\source\repos\AttendanceRegister\Attendance.Web.Api\obj\Debug\net5.0\Attendance.Web.Api.AssemblyInfo.cs
@@ -38,3 +37,4 @@ C:\Users\George Ngcobo\source\repos\AttendanceRegister\Attendance.Web.Api\obj\De
 C:\Users\George Ngcobo\source\repos\AttendanceRegister\Attendance.Web.Api\obj\Debug\net5.0\ref\Attendance.Web.Api.dll
 C:\Users\George Ngcobo\source\repos\AttendanceRegister\Attendance.Web.Api\obj\Debug\net5.0\Attendance.Web.Api.pdb
 C:\Users\George Ngcobo\source\repos\AttendanceRegister\Attendance.Web.Api\obj\Debug\net5.0\Attendance.Web.Api.genruntimeconfig.cache
+C:\Users\George Ngcobo\source\repos\AttendanceRegister\Attendance.Web.Api\obj\Debug\net5.0\Attendance.Web.Api.csproj.AssemblyReference.cache

@@ -41,7 +41,7 @@ namespace Attendance.Web.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> AddStudent([FromBody] AddStudent userRequest)
         {
-            var (state, clientMessage) = await this._adminService.AddStudent(userRequest).ConfigureAwait(false);
+            var (state, clientMessage) = await this._adminService.AddStudentAsync(userRequest).ConfigureAwait(false);
             return HttpStatusCodeResolver.Resolve(state, new {Message = clientMessage });
         }
 
@@ -57,7 +57,7 @@ namespace Attendance.Web.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> AddClass([FromBody] AddClass userRequest)
         {
-            var (state, clientMessage) = await this._adminService.AddClass(userRequest).ConfigureAwait(false);
+            var (state, clientMessage) = await this._adminService.AddClassAsync(userRequest).ConfigureAwait(false);
             return HttpStatusCodeResolver.Resolve(state, new { Message = clientMessage });
         }
 
@@ -69,12 +69,12 @@ namespace Attendance.Web.Api.Controllers
         /// <returns>Status of request.</returns>
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost]
-        [Route("EnrollClass")]
+        [Route("Enroll")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> RegisterInClass([FromBody] ClassRegistration userRequest)
         {
-            var (state, clientMessage) = await this._adminService.RegisterInClass(userRequest).ConfigureAwait(false);
+            var (state, clientMessage) = await this._adminService.RegisterInClassAsync(userRequest).ConfigureAwait(false);
             return HttpStatusCodeResolver.Resolve(state, new { Message = clientMessage });
         }
 
@@ -85,12 +85,12 @@ namespace Attendance.Web.Api.Controllers
         /// <returns>Status of request.</returns>
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost]
-        [Route("RecordAttendance")]
+        [Route("Attendance")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> CaptureAttendance([FromBody] AddAttendance userRequest)
         {
-            var (state, clientMessage) = await this._adminService.CaptureAttendance(userRequest).ConfigureAwait(false);
+            var (state, clientMessage) = await this._adminService.CaptureAttendanceAsync(userRequest).ConfigureAwait(false);
             return HttpStatusCodeResolver.Resolve(state, new { Message = clientMessage });
         }
 
@@ -105,23 +105,56 @@ namespace Attendance.Web.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetClasses()
         {
-            var (result, state, clientMessage) = await this._adminService.GetClass().ConfigureAwait(false);
+            var (result, state, clientMessage) = await this._adminService.GetClassAsync().ConfigureAwait(false);
             return HttpStatusCodeResolver.Resolve(state, new {Classes = result, Message = clientMessage });
         }
+
         /// <summary>
         /// List of registered students in each class
         /// </summary>
         /// <returns>Status of request.</returns>
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet]
-        [Route("RegisteredStudents/{filterClass}")]
+        [Route("Registrations/Class/{filterClass}/Student/{filterStudentId}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<RegisteredStudents>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> RegisteredStudents(int filterClass = -1)
+        public async Task<IActionResult> RegisteredStudents(int filterClass = -1, int filterStudentId = -1)
         {
-            var (result, state, clientMessage) = await this._adminService.GetRegisteredStudents(filterClass).ConfigureAwait(false);
+            var (result, state, clientMessage) = await this._adminService.GetRegisteredStudentsAsync(filterClass, filterStudentId).ConfigureAwait(false);
             return HttpStatusCodeResolver.Resolve(state, new { RegisteredStudents = result, Message = clientMessage });
         }
+
+        /// <summary>
+        /// List of registered students in each class
+        /// </summary>
+        /// <returns>Status of request.</returns>
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpGet]
+        [Route("Teachers/{teacherId}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<RegisteredStudents>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Teachers(int teacherId = -1)
+        {
+            var (result, state, clientMessage) = await this._adminService.GetTeachersAsync(teacherId).ConfigureAwait(false);
+            return HttpStatusCodeResolver.Resolve(state, new { Teachers = result, Message = clientMessage });
+        }
+
+
+        /// <summary>
+        /// List of registered students in each class
+        /// </summary>
+        /// <returns>Status of request.</returns>
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpGet]
+        [Route("Students/{studentId}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Student>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Students(int studentId = -1)
+        {
+            var (result, state, clientMessage) = await this._adminService.GetStudentsAsync(studentId).ConfigureAwait(false);
+            return HttpStatusCodeResolver.Resolve(state, new { Students = result, Message = clientMessage });
+        }
+
 
     }
 }

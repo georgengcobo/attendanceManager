@@ -14,6 +14,7 @@ $(document).ready(function () {
     var ClassesRequestSettings = {
         "async": true,
         "crossDomain": true,
+
         "url": activeclasseUri,
         "method": "GET",
         "headers": {
@@ -35,6 +36,8 @@ function GetActiveClasses(ClassesRequestSettings) {
         console.log("Entire Response : ", classesResponse);
 
         var t = $('#RegisteredClasses').DataTable();
+        t.clear();
+        t.draw();
 
         $.each(classesResponse.classes, function (index, element) {
 

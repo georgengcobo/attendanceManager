@@ -35,9 +35,9 @@ namespace Attendance.Web.Api.Services
         /// <inheritdoc />
         public async Task<(string, ResultCodes, string)> AuthenticateUser(Login user)
         {
-            var targetUser = await this._repo.GetUserDetailsByEmailAsync(user.Email).ConfigureAwait(false);
+            var teachers = await this._repo.GetUserDetailsByEmailAsync(user.Email).ConfigureAwait(false);
 
-            if (targetUser.Equals(default(Teacher)))
+            if (teachers.Equals(default(Teacher)))
             {
                 var msg =
                         $"User with identifier by Email: {user.Email} was not found in AuthenticateUser request";
@@ -47,14 +47,14 @@ namespace Attendance.Web.Api.Services
 
             var userHash = Validations.CalculateMD5Hash(user.Password);
 
-            if (!string.Equals(userHash.ToLower(), targetUser.Password.ToLower(), StringComparison.Ordinal))
+            if (!string.Equals(userHash.ToLower(), teachers.Password.ToLower(), StringComparison.Ordinal))
             {
                 var msg = $"Invalid user Credentials Provided for  {user.Email} ";
                 this._logging.LogWarning((int)ResultCodes.UserNotFoundException, msg);
                 return (null, ResultCodes.InvalidPasswordException, msg);
             }
 
-            var token = await Jwt.GenerateJsonWebToken(targetUser.UserId, this._config).ConfigureAwait(false);
+            var token = await Jwt.GenerateJsonWebToken(teachers.TeacherId, this._config).ConfigureAwait(false);
 
             return (token, ResultCodes.OkResult, "Login Ok");
         }
