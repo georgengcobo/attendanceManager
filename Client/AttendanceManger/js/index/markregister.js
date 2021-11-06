@@ -1,14 +1,17 @@
 function MarkRegister(classId) {
-  var url = GenerateEndpoint("GET_RegisteredStudents");
+  var token = sessionStorage.getItem("token");
 
-  url = url + classId;
+  var baseUri = GenerateEndpoint("BaseUri");
+  var studentId = -1;
+
+  const regUri = `${baseUri}/Admin/Registrations/Class/${classId}/Student/${studentId}`;
 
   var token = sessionStorage.getItem("token");
 
   var registeredStudentsSettings = {
     async: true,
     crossDomain: true,
-    url: url,
+    url: regUri,
     method: "GET",
     headers: {
       "Access-Control-Allow-Origin": "*",
@@ -22,25 +25,26 @@ function MarkRegister(classId) {
     .done(function (response) {
       console.log("Entire Response : ", response);
 
-      var t = $("#MarkRegisterFrom").DataTable();
+      var t = $("#MarkRegisterTbl").DataTable({
+        responsive: true,
+      });
+
       t.clear();
       t.draw();
 
       $.each(response.registeredStudents, function (index, element) {
         var attendaceOptions =
-          '<select name="Reg_' +
-          element.registrationId +
-          '" id="Reg_' +
-          element.registrationId +
-          '"><option value="-1">?</option><option value="1">Yes</option><option value="0">No</option></select>';
+          '<select name="Reg" id="Reg"><option value="-1">?</option><option value="1">Yes</option><option value="0">No</option></select>';
 
         t.row
           .add([
+            element.registrationId,
             element.className,
             element.grade,
             element.studentName,
             element.idNumber,
             element.teacherName,
+            element.teacherId,
             attendaceOptions,
           ])
           .draw(false);

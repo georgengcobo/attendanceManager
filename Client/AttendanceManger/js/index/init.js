@@ -1,5 +1,4 @@
 $(document).ready(function () {
-
   var activeclasseUri = GenerateEndpoint("GET_Classes");
 
   var token = sessionStorage.getItem("token");
@@ -24,7 +23,10 @@ function GetActiveClasses(ClassesRequestSettings) {
   $.get(ClassesRequestSettings, function (classesResponse) {
     console.log("Entire Response : ", classesResponse);
 
-    var t = $("#RegisteredClasses").DataTable();
+    var t = $("#RegisteredClasses").DataTable({
+      responsive: true,
+    });
+
     t.clear();
     t.draw();
 
