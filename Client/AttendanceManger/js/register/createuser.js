@@ -1,34 +1,35 @@
-$("#loginform").submit(function (event) {
+$("#Registerform").submit(function (event) {
   event.preventDefault();
 
-  var url = GenerateEndpoint("POST_LogIn");
-  console.log("Logging user in");
+  var url = GenerateEndpoint("POST_AddUser");
+  console.log("Creating New User");
 
-  var loginRequest = new Object();
-  loginRequest.Email = $("#Email").val();
-  loginRequest.Password = $("#Password").val();
+  var Request = new Object();
+  Request.Email = $("#Email").val();
+  Request.Password = $("#Password").val();
 
-  var settings = {
+  var userSettings = {
     async: true,
     crossDomain: true,
     url: url,
     method: "POST",
     headers: {
+      "Access-Control-Allow-Origin": "*",
       "content-type": "application/json",
     },
-    data: JSON.stringify(loginRequest),
+    data: JSON.stringify(Request),
   };
 
-  $.ajax(settings)
+  $.ajax(userSettings)
     .done(function (response) {
       console.log(response);
-      alert("Login Success");
+      alert("Registration Success");
       sessionStorage.setItem("isLoggedin", "true");
       var bearerToken = "Bearer" + " " + response.token;
       sessionStorage.setItem("token", bearerToken);
       window.location.replace("index.html");
     })
     .fail(function (data, textStatus, xhr) {
-      alert("Login Fail , try again");
+      alert("Error Registering user ! " + data.responseJSON.title);
     });
 });

@@ -21,6 +21,7 @@
     <script src="js/sb-admin-2.js"></script>
     <script src="js/menu/endpoints.js"></script>
     <script src="js/menu/menu.js"></script>
+    <script src="js/menu/init.js"></script>
     <script src="js/enrollstudents/init.js"></script>
 
     <script>
@@ -72,6 +73,7 @@
                 <section id="banner">
                     <div class="content">
                         <header>
+                            <h2>Enroll Students to class</h2>
                         </header>
                         <div class="table-responsive-sm">
                             <table id="Students" class="table table-striped">
@@ -120,16 +122,29 @@
                     <h3>Enroll Student to Class</h3>
                 </div>
                 <div class="modal-body">
+                    <h3>Register for Class</h3>
                     <form id="EnrolStudentFrom" class="form-horizontal" enctype="multipart/form-data"
                         name="MarkRegistrationFrom">
+                        <br>
+                        <div class="form-group">
+                        
+                            <label class="col-lg-4 control-label" for="AvailClasses">Avalable Classes</label>
+                            <div class="col-lg-4">
+                                <select class="form-control" name="AvailClasses" id="AvailClasses"  required>
+                                     <option disabled selected value="-1"> Select Class to Attend</option>
+                                </select>
+                            </div>
+                        </div>
 
+                        <br>
+                        <br>  
 
                         <button type="submit" id="UpdateRegister" class="btn btn-success">Register Class</button>
                         <button type="button" id="cancel" class="btn btn-info" data-dismiss="modal">Cancel</button>
 
                     </form>
 
-                    <h3>Existing Classes</h3>
+                    <h3>Enrolled Classes</h3>
                     <div class="table-responsive-sm">
                         <table id="registeredClasses" class="table table-striped">
                             <thead>
@@ -158,5 +173,4 @@
 
 </html>
 <script src="js/enrollstudents/RegisterStudent.js"></script>
-<script src="js/enrollstudents/editproduct.js"></script>
-<script src="js/enrollstudents/markregister.js"></script>
+

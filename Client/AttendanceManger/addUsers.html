@@ -1,10 +1,22 @@
 <html>
-<head>
-    <title>TripManager</title>
+  <head>
+    <title>Add Users</title>
     <meta charset="utf-8" />
-     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"
+    ></script>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, user-scalable=no"
+    />
     <link rel="stylesheet" href="assets/css/main.css" />
     <script src="assets/js/jquery.min.js"></script>
     <script src="assets/js/skel.min.js"></script>
@@ -15,138 +27,202 @@
     <script src="js/security_common.js"></script>
     <script src="js/menu/endpoints.js"></script>
     <script src="js/menu/menu.js"></script>
-    <script src="js/adduser/documentreadyfunctions.js"></script>
-   
+    <script src="js/menu/init.js"></script>
+
     <!-- Loader CSS -->
     <style>
-        .loader {
-            position: fixed;
-            left: 0px;
-            top: 0px;
-            width: 100%;
-            height: 100%;
-            z-index: 9999;
-            background: url('images/loadingoriginal.gif') 50% 50% no-repeat rgb(249, 249, 249);
-            opacity: .8;
-        }
+      .loader {
+        position: fixed;
+        left: 0px;
+        top: 0px;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+        background: url("images/loadingoriginal.gif") 50% 50% no-repeat
+          rgb(249, 249, 249);
+        opacity: 0.8;
+      }
     </style>
+  </head>
 
-</head>
-
-<body>
+  <body>
     <div class="loader"></div>
     <!-- Wrapper -->
     <div id="wrapper">
+      <!-- Main -->
+      <div id="main">
+        <div class="inner">
+          <!-- Header -->
+          <header id="header">
+            <a href="index.html" class="logo">
+                <strong>Attendance Management Application</strong>
+            </a>
+            <ul class="icons">
+              <li>
+                <a href="#" class="icon fa-twitter"
+                  ><span class="label">Twitter</span></a
+                >
+              </li>
+              <li>
+                <a href="#" class="icon fa-facebook"
+                  ><span class="label">Facebook</span></a
+                >
+              </li>
+              <li>
+                <a href="#" class="icon fa-snapchat-ghost"
+                  ><span class="label">Snapchat</span></a
+                >
+              </li>
+              <li>
+                <a href="#" class="icon fa-instagram"
+                  ><span class="label">Instagram</span></a
+                >
+              </li>
+              <li>
+                <a href="#" class="icon fa-medium"
+                  ><span class="label">Medium</span></a
+                >
+              </li>
+            </ul>
+          </header>
+          <!-- Banner -->
+          <section id="banner">
+            <div class="content">
+              <header>
+                <h2>Manage Users</h2>
+              </header>
 
-        <!-- Main -->
-        <div id="main">
-            <div class="inner">
-                <!-- Header -->
-                <header id="header">
-                    <a href="index.html" class="logo"><strong>Trip Managment Application </strong></a>
-                    <ul class="icons">
-                        <li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
-                        <li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
-                        <li><a href="#" class="icon fa-snapchat-ghost"><span class="label">Snapchat</span></a></li>
-                        <li><a href="#" class="icon fa-instagram"><span class="label">Instagram</span></a></li>
-                        <li><a href="#" class="icon fa-medium"><span class="label">Medium</span></a></li>
-                    </ul>
-                </header>
-                <!-- Banner -->
-                <section id="banner">
-                    <div class="content">
-                        <header>
-                        <h2>Manage Users</h2>
-                        </header>
-
-                    <form id="CreateUserFrom">
-
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label" for="Name">Name</label>
-                            <div class="col-lg-3">
-                                <input class="form-control" autocomplete="off"  id="Name"  name="Name" type="text" placeholder="Name" required>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-							<label class="col-lg-2 control-label" for="Destination">Surname</label>
-							<div class="col-lg-3">
-                                    <input class="form-control" autocomplete="off"  id="Surname"  name="Surname" type="text" placeholder="Surname" required>
-							</div>                  
-						</div>
-
-                        
-                        <div class="form-group">
-							<label class="col-lg-2 control-label" for="Number">Number</label>
-							<div class="col-lg-3">
-                                    <input class="form-control" autocomplete="off"  id="Number"  name="Number" type="text" placeholder="0725434444" required>
-							</div>                  
-						</div>
-
-                        <div class="form-group">
-							<label class="col-lg-2 control-label" for="Password">Password</label>
-							<div class="col-lg-3">
-                                    <input class="form-control" autocomplete="off"  id="Password"  name="Password" type="Password" placeholder="Password" required>
-							</div>
-                        </div>
-
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="IsAdmin">
-                            <label class="form-check-label" for="IsAdmin">IsAdmin</label>
-                        </div>
-
-                        <br>
-                        <br>  
-
-                        <button type="submit" id="createUser" class="btn btn-primary">Add User</button>
-                        <button type="button" id="cancel" class="btn btn-default" >Cancel</button>
-
-                    </form>
-                        <br>
-                        <br> 
-                        <div class="table-responsive-sm">
-                         <table id="UserList" class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Id</th>
-                                        <th scope="col">Name</th>
-                                        <th scope="col">SurName</th>
-                                        <th scope="col">Number</th>
-                                        <th scope="col">IsAdmin</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                </tbody>
-                            </table>
-                        </div>
+              <form id="CreateUserFrom">
+                <div class="form-group">
+                  <label class="col-lg-2 control-label" for="Name">Name</label>
+                  <div class="col-lg-3">
+                    <input
+                      class="form-control"
+                      autocomplete="off"
+                      id="Name"
+                      name="Name"
+                      type="text"
+                      placeholder="Name"
+                      required
+                    />
+                  </div>
                 </div>
-                </section>
-            </div>
-        </div>
-        <!-- Sidebar -->
-        <div id="sidebar">
-            <div class="inner">
-                <!-- Search -->
-                <section id="search" class="alt">
-                    <form method="post" action="#">
-                        <input type="text" name="query" id="query" placeholder="Search" />
-                    </form>
-                </section>
-                <!-- Menu -->
-                <nav id="menu">
 
-                </nav>
-                <!-- Footer -->
-                <footer id="footer">
-                    <p class="copyright">&copy; Kid Sweet <a href="http://www.KidSweetStudios.co.za">Trip Management System</a>. Design: <a href="http://www.kidsweetstudios.co.za">KidSweetStudios</a>.</p>
-                </footer>
+                <div class="form-group">
+                  <label class="col-lg-2 control-label" for="Destination"
+                    >Surname</label
+                  >
+                  <div class="col-lg-3">
+                    <input
+                      class="form-control"
+                      autocomplete="off"
+                      id="Surname"
+                      name="Surname"
+                      type="text"
+                      placeholder="Surname"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-lg-2 control-label" for="Number"
+                    >Number</label
+                  >
+                  <div class="col-lg-3">
+                    <input
+                      class="form-control"
+                      autocomplete="off"
+                      id="Number"
+                      name="Number"
+                      type="text"
+                      placeholder="0725434444"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-lg-2 control-label" for="Password"
+                    >Password</label
+                  >
+                  <div class="col-lg-3">
+                    <input
+                      class="form-control"
+                      autocomplete="off"
+                      id="Password"
+                      name="Password"
+                      type="Password"
+                      placeholder="Password"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="IsAdmin"
+                  />
+                  <label class="form-check-label" for="IsAdmin">IsAdmin</label>
+                </div>
+
+                <br />
+                <br />
+
+                <button type="submit" id="createUser" class="btn btn-primary">
+                  Add User
+                </button>
+                <button type="button" id="cancel" class="btn btn-default">
+                  Cancel
+                </button>
+              </form>
+              <br />
+              <br />
+              <div class="table-responsive-sm">
+                <table id="UserList" class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th scope="col">Id</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">SurName</th>
+                      <th scope="col">Number</th>
+                      <th scope="col">IsAdmin</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
             </div>
+          </section>
         </div>
+      </div>
+      <!-- Sidebar -->
+      <div id="sidebar">
+        <div class="inner">
+          <!-- Search -->
+          <section id="search" class="alt">
+            <form method="post" action="#">
+              <input type="text" name="query" id="query" placeholder="Search" />
+            </form>
+          </section>
+          <!-- Menu -->
+          <nav id="menu"></nav>
+          <!-- Footer -->
+          <footer id="footer">
+            <p class="copyright">
+              &copy; Kid Sweet
+              <a href="http://www.KidSweetStudios.co.za"
+                >Trip Management System</a
+              >. Design:
+              <a href="http://www.kidsweetstudios.co.za">KidSweetStudios</a>.
+            </p>
+          </footer>
+        </div>
+      </div>
     </div>
-
-</body>
-
+  </body>
 </html>
 
 <script src="js/adduser/createUser.js"></script>
