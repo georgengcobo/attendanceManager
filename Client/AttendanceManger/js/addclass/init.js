@@ -29,7 +29,7 @@ $(document).ready(function () {
     console.log("Entire Response : ", response);
 
     $.each(response.teachers, function (index, element) {
-      $("#AvailClasses").append(
+      $("#teacher").append(
         new Option(element.fullName, element.teacherId)
       );
     });
