@@ -23,8 +23,6 @@ $(document).ready(function () {
   menuOptions += "</li>";
   menuOptions += "</ul>";
 
-  console.log(menuOptions);
-
   $("#menu").append(menuOptions);
 
   $("#logout").click(function () {
