@@ -6,17 +6,13 @@ $("#CreateStudntForm").submit(function (event) {
     alert("Please provide 13 Digit Id number")
     return;
   }
-  
+
   var studentRequest = new Object();
   studentRequest.Name = $("#Name").val();
   studentRequest.Surname = $("#Surname").val();
   studentRequest.IdNumber = $("#IdNumber").val();
 
-
-
-
   var url = GenerateEndpoint("POST_AddStudent");
-  console.log("Regstistering attendance");
 
   var token = sessionStorage.getItem("token");
 

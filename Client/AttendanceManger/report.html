@@ -1,0 +1,128 @@
+<html>
+
+<head>
+    <title>Attendance Report</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <script src="assets/js/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <script src="assets/js/skel.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
+    <link rel="stylesheet" type="text/css" href="assets/DataTables/datatables.min.css" />
+    <script type="text/javascript" src="assets/DataTables/datatables.min.js"></script>
+    <script src="js/security_common.js"></script>
+    <script src="js/sb-admin-2.js"></script>
+    <script src="js/menu/endpoints.js"></script>
+    <script src="js/menu/menu.js"></script>
+    <script src="js/menu/init.js"></script>
+    <!-- Loader CSS -->
+    <style>
+        .loader {
+            position: fixed;
+            left: 0px;
+            top: 0px;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background: url("images/loadingoriginal.gif") 50% 50% no-repeat rgb(249, 249, 249);
+            opacity: 0.8;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="loader"></div>
+    <!-- Wrapper -->
+    <div id="wrapper">
+        <!-- Main -->
+        <div id="main">
+            <div class="inner">
+                <!-- Header -->
+                <header id="header">
+                    <a href="index.html" class="logo"><strong>Attendance Management Application</strong></a>
+                    <ul class="icons"></ul>
+                </header>
+                <!-- Banner -->
+                <section id="banner">
+                    <div class="content">
+                        <header>
+                            <h2>Attendance Report</h2>
+                        </header>
+                        <form id="PeriodReport" class="form-horizontal" enctype="multipart/form-data"
+                            name="PeriodReport">
+
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <label class="col-lg-3 control-label" for="Name">Start Date</label>
+                                    <input class="form-control" type="datetime-local" id="AttendanceDate"
+                                        name="AttendanceDate" required />
+                                </div>
+                             
+                                <div class="col-lg-3">
+                                    <label class="col-lg-3 control-label" for="Name">End Date</label>
+                                    <input class="form-control" type="datetime-local" id="AttendanceDate"
+                                        name="AttendanceDate" required />
+                            </div>
+                        </div>
+                        <br />
+            
+                        <div class="form-group">
+                            <div class="col-lg-3">
+                                <button type="submit" id="Generate" class="btn btn-primary">
+                                    Generate
+                                </button>
+                            </div>
+                        </div>
+                        </form>
+                        <br />
+                        <div id="Reporting" style="display: none">
+                            <div class="table-responsive-sm">
+                                <table id="RegisteredClasses" class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Date</th>
+                                            <th scope="col">Class Name</th>
+                                            <th scope="col">Grade</th>
+                                            <th scope="col">Student</th>
+                                            <th scope="col">Id Number</th>
+                                            <th scope="col">Teacher</th>
+                                            <th scope="col">Present</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+        <!-- Sidebar -->
+        <div id="sidebar">
+            <div class="inner">
+                <!-- Search -->
+                <section id="search" class="alt">
+                    <form method="post" action="#">
+                        <input type="text" name="query" id="query" placeholder="Search" />
+                    </form>
+                </section>
+                <!-- Menu -->
+                <nav id="menu"></nav>
+                <!-- Footer -->
+                <footer id="footer">
+                    <p class="copyright">&copy;</p>
+                </footer>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+<script src="js/reports/periodreport.js"></script>

@@ -14,7 +14,7 @@ $(document).ready(function () {
 
   menuOptions +='<li><a href="index.html" title="Mark Attendance register"><img src="./images/icons/essen/32/calendar.png"/> Mark Attendance</a></div></li>';
 
- 
+  menuOptions +='<li><a href="report.html" title="Mark Attendance register"><img src="./images/icons/essen/32/statistics.png"/>Attendance Report</a></div></li>';
   menuOptions += "</ul>";
 
   $("#menu").append(menuOptions);

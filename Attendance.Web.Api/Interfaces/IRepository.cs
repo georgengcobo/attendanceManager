@@ -16,7 +16,7 @@ namespace Attendance.Web.Api.Interfaces
         /// Gets User Details from the database by Contact number.
         /// </summary>
         /// <param name="emailAddress">User Registered Email.</param>
-        /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
+        /// <returns>A <see cref="Task{Teacher}"/> representing the result of the asynchronous operation.</returns>
         public Task<Teacher> GetUserDetailsByEmailAsync(string emailAddress);
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace Attendance.Web.Api.Interfaces
         /// Gets Student Details.
         /// </summary>
         /// <param name="identityNumber">Student Identifier.</param>
-        /// <returns>returns existing student.</returns>
+        /// <returns>returns existing student. <see cref="Student"/></returns>
         public Task<Student> GetStudentDetailsByIdNumberAsync(string identityNumber);
 
         /// <summary>
@@ -52,28 +52,28 @@ namespace Attendance.Web.Api.Interfaces
         /// Gets details of an existing class
         /// </summary>
         /// <param name="targetClass">target class</param>
-        /// <returns>create class that can be taught.</returns>
+        /// <returns>create class that can be taught. <see cref="Classes"/></returns>
         public Task<Classes> GetClassDetailsAsync(AddClass targetClass);
 
         /// <summary>
         /// Gets details of an existing class
         /// </summary>
         /// <param name="classId">target class</param>
-        /// <returns>create class that can be taught.</returns>
+        /// <returns>create class that can be taught. <see cref="Classes"/></returns>
         public Task<Classes> GetClassDetailsByIdAsync(int classId);
 
         /// <summary>
         /// Gets Student Details.
         /// </summary>
         /// <param name="studentKey">Student Db Identifier.</param>
-        /// <returns>returns existing student.</returns>
+        /// <returns>returns existing student. </returns>
         public Task<List<Student>> GetStudentDetailsByKeyAsync(int studentKey = -1);
 
         /// <summary>
         /// Gets Student class registration Details.
         /// </summary>
         /// <param name="registration">Student registration.</param>
-        /// <returns>returns existing student registration.</returns>
+        /// <returns>returns existing student registration. Registration</returns>
         public Task<Registration> GetRegistrationDetailsAsync(ClassRegistration registration);
 
 
@@ -88,14 +88,14 @@ namespace Attendance.Web.Api.Interfaces
         /// Get Student class registration.
         /// </summary>
         /// <param name="registrationKey">Student registration.</param>
-        /// <returns>returns student registration.</returns>
+        /// <returns>returns student registration. <see cref="Registration"/></returns>
         public Task<Registration> GetStudentRegistrationByKeyAsync(int registrationKey);
 
         /// <summary>
         /// Teacher registration.
         /// </summary>
         /// <param name="teacherId">Teacher Identifier.</param>
-        /// <returns>returns teacher.</returns>
+        /// <returns>returns teacher.<see cref="List&lt;Teacher&gt;"/></returns>
         public Task<List<Teacher>> GetTeacherDetailsByKeyAsync(int teacherId);
 
         /// <summary>
@@ -116,19 +116,24 @@ namespace Attendance.Web.Api.Interfaces
         /// gets Attendance record.
         /// </summary>
         /// <param name="attendance">attendance record.</param>
-        /// <returns>returns attendance record</returns>
+        /// <returns>returns attendance record<see cref="List&lt;AttendanceRecord&gt;"/></returns>
         public Task<AttendanceRecord> GetAttendanceRecordAsync(AddAttendance attendance);
 
         /// <summary>
         /// Gets list of classes.
         /// </summary>
-        /// <returns>returns list of classes.</returns>
+        /// <returns>returns list of classes. <see cref="List&lt;ClassesResponse&gt;"/></returns>
         public Task<List<ClassesResponse>> GetAllClassesAsync();
 
         /// <summary>
         /// Gets list of registered users.
         /// </summary>
-        /// <returns>list of registered users.</returns>
+        /// <returns>list of registered users.<see cref="List&lt;RegisteredStudents&gt;"/></returns>
         public Task<List<RegisteredStudents>> GetAllRegisteredStudentsAsync(int filterByClassId = -1, int filterByStudentId = -1);
+
+        /// <summary>
+        /// </summary>
+        /// <returns>list of registered users. <see cref="List&lt;RegisteredStudents&gt;"/></returns>
+        public Task<(List<RegisteredStudents>,bool)> GetPeriodReportAsync(PeriodRequest period);
     }
 }

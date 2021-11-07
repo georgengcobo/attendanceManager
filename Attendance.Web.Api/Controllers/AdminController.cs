@@ -110,7 +110,7 @@ namespace Attendance.Web.Api.Controllers
         }
 
         /// <summary>
-        /// List of registered students in each class
+        /// List of registered students in each class.
         /// </summary>
         /// <returns>Status of request.</returns>
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -141,9 +141,9 @@ namespace Attendance.Web.Api.Controllers
 
 
         /// <summary>
-        /// List of registered students in each class
+        /// List of registered students in each class.
         /// </summary>
-        /// <returns>Status of request.</returns>
+        /// <returns>student list.</returns>
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet]
         [Route("Students/{studentId}")]
@@ -153,6 +153,22 @@ namespace Attendance.Web.Api.Controllers
         {
             var (result, state, clientMessage) = await this._adminService.GetStudentsAsync(studentId).ConfigureAwait(false);
             return HttpStatusCodeResolver.Resolve(state, new { Students = result, Message = clientMessage });
+        }
+
+        /// <summary>
+        /// Period Report.
+        /// </summary>
+        /// <param name="period">Specific period being reported on.</param>
+        /// <returns>Period Report.</returns>
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpPost]
+        [Route("Reports/PeriodReport")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<PeriodReportResult>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> PeriodReport([FromBody] PeriodRequest period)
+        {
+            var (result ,state, clientMessage) = await this._adminService.PeriodReportAsync(period).ConfigureAwait(false);
+            return HttpStatusCodeResolver.Resolve(state, new { PeriodReport = result, Message = clientMessage });
         }
 
 

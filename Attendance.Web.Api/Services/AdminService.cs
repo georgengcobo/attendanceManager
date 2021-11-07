@@ -31,6 +31,7 @@ namespace Attendance.Web.Api.Services
             this._httpContextAccessor = httpContextAccessor;
         }
 
+      
         public async Task<(ResultCodes resultCode, string clientMessage)> AddStudentAsync(AddStudent newStudent)
         {
             var targetStudent = await this._repo.GetStudentDetailsByIdNumberAsync(newStudent.IdNumber).ConfigureAwait(false);
@@ -153,6 +154,13 @@ namespace Attendance.Web.Api.Services
         public async Task<(List<Student> classes, ResultCodes resultCode, string clientMessage)> GetStudentsAsync(int studentId = -1)
         {
             var result = await this._repo.GetStudentDetailsByKeyAsync(studentId).ConfigureAwait(false);
+
+            return (result, ResultCodes.OkResult, "Ok");
+        }
+
+        public Task<(List<PeriodReportResult> classes, ResultCodes resultCode, string clientMessage)> PeriodReportAsync(PeriodRequest period)
+        {
+            var result = await this._repo.GetPeriodReportAsync(period).ConfigureAwait(false);
 
             return (result, ResultCodes.OkResult, "Ok");
         }
