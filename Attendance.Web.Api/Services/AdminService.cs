@@ -5,6 +5,7 @@ using Attendance.Web.Api.DTO;
 using Attendance.Web.Api.Enum;
 using Attendance.Web.Api.Interfaces;
 using Attendance.Web.Api.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using TeacherResponse = Attendance.Web.Api.DTO.TeacherResponse;
 
@@ -14,11 +15,20 @@ namespace Attendance.Web.Api.Services
     {
         private readonly IRepository _repo;
         private readonly ILogger<AdminService> _logging;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AdminService(IRepository repo, ILogger<AdminService> logging)
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AdminService"/> class.
+        /// </summary>
+        /// <param name="repo">repository where data is stored.</param>
+        /// <param name="logging">application logging.</param>
+        /// <param name="httpContextAccessor">Http Context to access User token.</param>
+        public AdminService(IRepository repo, ILogger<AdminService> logging, IHttpContextAccessor httpContextAccessor)
         {
             this._repo = repo;
             this._logging = logging;
+            this._httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<(ResultCodes resultCode, string clientMessage)> AddStudentAsync(AddStudent newStudent)
@@ -27,6 +37,8 @@ namespace Attendance.Web.Api.Services
 
             if (targetStudent.Equals(default(Student)))
             {
+                var teacherId = int.Parse(this._httpContextAccessor.HttpContext?.User.Claims.First(x => x.Type == "UserId").Value ?? string.Empty);
+
                 var result = await this._repo.CreateNewStudentAsync(newStudent).ConfigureAwait(false);
 
                 return result ? (ResultCodes.OkResult, "Student Created Ok") : (ResultCodes.UnexpectedOperationException, "Error creating student in database");

@@ -18,6 +18,7 @@ namespace Attendance.Web.Api.Helpers
             /// Generate JWT Token.
             /// </summary>
             /// <param name="userInfo">Object with user details.</param>
+            /// <param name="userId">user Identifier</param>
             /// <param name="config">WebConfig with API details.</param>
             /// <returns>JSON WEB Token.</returns>
             public static Task<string> GenerateJsonWebToken(int userId, IConfiguration config)

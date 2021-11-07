@@ -1,6 +1,7 @@
 function RegisterStudent(studentId) {
   var classId = -1;
 
+  document.getElementById("StudentId").value = studentId;
   var token = sessionStorage.getItem("token");
 
   var baseUri = GenerateEndpoint("BaseUri");

@@ -16,7 +16,7 @@ window.onload = function () {
     const getClasses = "/Admin/Classes";
     const addStudent = "/Admin/AddStudent";
     const addClass = "/Admin/AddClass";
-    const enrollStudent = "/Admin/EnrollClass";
+    const enrollStudent = "/Admin/Enroll";
     const recordAttendance = "/Admin/Attendance";
     var endpointDictionary = {};
     // map menu items to json object here

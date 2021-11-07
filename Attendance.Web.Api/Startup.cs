@@ -17,6 +17,8 @@ using Attendance.Web.Api.Interfaces;
 using Attendance.Web.Api.Repo;
 using Attendance.Web.Api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Attendance.Web.Api
@@ -53,6 +55,7 @@ namespace Attendance.Web.Api
             services.AddSingleton<IRepository, Repository>();
             services.AddSingleton<IUserService, UserService>();
             services.AddSingleton<IAdminService, AdminService>();
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Attendance.Web.Api", Version = "v1" });
