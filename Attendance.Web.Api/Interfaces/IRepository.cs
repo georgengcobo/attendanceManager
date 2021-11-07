@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Attendance.Web.Api.DTO;
+using Attendance.Web.Api.Enum;
 using Attendance.Web.Api.Models;
 using Teacher = Attendance.Web.Api.Models.Teacher;
 
@@ -11,13 +12,12 @@ namespace Attendance.Web.Api.Interfaces
     /// </summary>
     public interface IRepository
     {
-
         /// <summary>
         /// Gets User Details from the database by Contact number.
         /// </summary>
         /// <param name="emailAddress">User Registered Email.</param>
         /// <returns>A <see cref="Task{Teacher}"/> representing the result of the asynchronous operation.</returns>
-        public Task<Teacher> GetUserDetailsByEmailAsync(string emailAddress);
+        public Task<(Teacher, ResultCodes code)> GetUserDetailsByEmailAsync(string emailAddress);
 
         /// <summary>
         /// Creates user and issues a temporary token to access the system.
@@ -32,7 +32,7 @@ namespace Attendance.Web.Api.Interfaces
         /// </summary>
         /// <param name="identityNumber">Student Identifier.</param>
         /// <returns>returns existing student. <see cref="Student"/></returns>
-        public Task<Student> GetStudentDetailsByIdNumberAsync(string identityNumber);
+        public Task<(Student, ResultCodes code)> GetStudentDetailsByIdNumberAsync(string identityNumber);
 
         /// <summary>
         /// Creates a new student
@@ -53,14 +53,14 @@ namespace Attendance.Web.Api.Interfaces
         /// </summary>
         /// <param name="targetClass">target class</param>
         /// <returns>create class that can be taught. <see cref="Classes"/></returns>
-        public Task<Classes> GetClassDetailsAsync(AddClass targetClass);
+        public Task<(Classes, ResultCodes code)> GetClassDetailsAsync(AddClass targetClass);
 
         /// <summary>
         /// Gets details of an existing class
         /// </summary>
         /// <param name="classId">target class</param>
         /// <returns>create class that can be taught. <see cref="Classes"/></returns>
-        public Task<Classes> GetClassDetailsByIdAsync(int classId);
+        public Task<(Classes, ResultCodes code)> GetClassDetailsByIdAsync(int classId);
 
         /// <summary>
         /// Gets Student Details.
@@ -123,17 +123,18 @@ namespace Attendance.Web.Api.Interfaces
         /// Gets list of classes.
         /// </summary>
         /// <returns>returns list of classes. <see cref="List&lt;ClassesResponse&gt;"/></returns>
-        public Task<List<ClassesResponse>> GetAllClassesAsync();
+        public Task<(List<ClassesResponse>, ResultCodes code)> GetAllClassesAsync();
 
         /// <summary>
         /// Gets list of registered users.
         /// </summary>
         /// <returns>list of registered users.<see cref="List&lt;RegisteredStudents&gt;"/></returns>
-        public Task<List<RegisteredStudents>> GetAllRegisteredStudentsAsync(int filterByClassId = -1, int filterByStudentId = -1);
+        public Task<(List<RegisteredStudents>, ResultCodes code)> GetAllRegisteredStudentsAsync(
+            int filterByClassId = -1, int filterByStudentId = -1);
 
         /// <summary>
         /// </summary>
-        /// <returns>list of registered users. <see cref="List&lt;RegisteredStudents&gt;"/></returns>
-        public Task<(List<RegisteredStudents>,bool)> GetPeriodReportAsync(PeriodRequest period);
+        /// <returns>list of registered users. <see cref="List&lt;PeriodReportResult&gt;"/></returns>
+        public Task<(List<PeriodReportResult>, ResultCodes)> GetPeriodReportAsync(PeriodRequest period);
     }
 }

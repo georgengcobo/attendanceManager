@@ -59,7 +59,6 @@ $("#MarkRegistrationFrom").submit(function (event) {
     $.ajax(userSettings)
       .done(function (response) {
         console.log(response);
-        alert("Attendance summitted OK for ");
       })
       .fail(function (data, textStatus, xhr) {
         console.log(data);
@@ -73,4 +72,8 @@ $("#MarkRegistrationFrom").submit(function (event) {
         }
       });
   }
+
+  alert("Submissions Done !");
+  window.location.replace("index.html");
+
 });

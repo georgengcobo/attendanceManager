@@ -15,7 +15,7 @@ namespace Attendance.Web.Api.Helpers
         /// </summary>
         /// <param name="serviceResultCode">operation status code.</param>
         /// <param name="result">Response object that must be sent to client.</param>
-        /// <returns>object result.</returns>
+        /// <returns>object result. <see cref="ObjectResult"/></returns>
         public static ObjectResult Resolve(ResultCodes serviceResultCode, object result)
         {
             return serviceResultCode switch
@@ -26,6 +26,7 @@ namespace Attendance.Web.Api.Helpers
                 ResultCodes.InvalidTokenException => new UnauthorizedObjectResult(result),
                 ResultCodes.DuplicateRecordException => new ConflictObjectResult(result),
                 ResultCodes.DatabaseLevelException => new UnprocessableEntityObjectResult(result),
+                ResultCodes.RecordNotFoundException => new BadRequestObjectResult(result),
                 _ => new OkObjectResult(result),
             };
         }

@@ -24,6 +24,7 @@ function GetActiveClasses(ClassesRequestSettings) {
     console.log("Entire Response : ", classesResponse);
 
     var t = $("#RegisteredClasses").DataTable({
+      retrieve: true,
       responsive: true,
     });
 

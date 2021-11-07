@@ -1,10 +1,9 @@
 $(document).ready(function () {
-
   $("#Teacher").empty();
   $("#Teacher").append(new Option("-- Select Teacher --", -1));
 
   GetExistingClasses();
-  
+
   var teacherId = -1;
 
   var baseUri = GenerateEndpoint("BaseUri");
@@ -31,9 +30,7 @@ $(document).ready(function () {
     console.log("Entire Response : ", response);
 
     $.each(response.teachers, function (index, element) {
-      $("#Teacher").append(
-        new Option(element.fullName, element.teacherId)
-      );
+      $("#Teacher").append(new Option(element.fullName, element.teacherId));
     });
   }).fail(function (data, textStatus, xhr) {
     ManageException(

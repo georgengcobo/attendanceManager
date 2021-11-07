@@ -35,14 +35,19 @@ namespace Attendance.Web.Api.Services
         /// <inheritdoc />
         public async Task<(string, ResultCodes, string)> AuthenticateUser(Login user)
         {
-            var teachers = await this._repo.GetUserDetailsByEmailAsync(user.Email).ConfigureAwait(false);
+            var (teachers, resultCode) = await this._repo.GetUserDetailsByEmailAsync(user.Email).ConfigureAwait(false);
 
-            if (teachers.Equals(default(Teacher)))
+            if (teachers.Equals(default(Teacher)) && resultCode == ResultCodes.OkResult)
             {
                 var msg =
                         $"User with identifier by Email: {user.Email} was not found in AuthenticateUser request";
                     this._logging.LogWarning((int)ResultCodes.UserNotFoundException, msg);
                     return (null, ResultCodes.UserNotFoundException, msg);
+            }
+
+            if (resultCode != ResultCodes.OkResult)
+            {
+                return (null, resultCode, "System level exception detected");
             }
 
             var userHash = Validations.CalculateMD5Hash(user.Password);

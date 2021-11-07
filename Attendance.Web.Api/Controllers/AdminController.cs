@@ -105,8 +105,8 @@ namespace Attendance.Web.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetClasses()
         {
-            var (result, state, clientMessage) = await this._adminService.GetClassAsync().ConfigureAwait(false);
-            return HttpStatusCodeResolver.Resolve(state, new {Classes = result, Message = clientMessage });
+            var (result, state) = await this._adminService.GetClassAsync().ConfigureAwait(false);
+            return HttpStatusCodeResolver.Resolve(state, new {Classes = result});
         }
 
         /// <summary>
@@ -120,8 +120,8 @@ namespace Attendance.Web.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> RegisteredStudents(int filterClass = -1, int filterStudentId = -1)
         {
-            var (result, state, clientMessage) = await this._adminService.GetRegisteredStudentsAsync(filterClass, filterStudentId).ConfigureAwait(false);
-            return HttpStatusCodeResolver.Resolve(state, new { RegisteredStudents = result, Message = clientMessage });
+            var (result, state) = await this._adminService.GetRegisteredStudentsAsync(filterClass, filterStudentId).ConfigureAwait(false);
+            return HttpStatusCodeResolver.Resolve(state, new { RegisteredStudents = result });
         }
 
         /// <summary>
@@ -167,8 +167,8 @@ namespace Attendance.Web.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> PeriodReport([FromBody] PeriodRequest period)
         {
-            var (result ,state, clientMessage) = await this._adminService.PeriodReportAsync(period).ConfigureAwait(false);
-            return HttpStatusCodeResolver.Resolve(state, new { PeriodReport = result, Message = clientMessage });
+            var (result ,state) = await this._adminService.PeriodReportAsync(period).ConfigureAwait(false);
+            return HttpStatusCodeResolver.Resolve(state, new { PeriodReport = result });
         }
 
 

@@ -41,7 +41,7 @@ namespace Attendance.Web.Api.Interfaces
         /// Gets List of Classes.
         /// </summary>
         /// <returns><see cref="List&lt;ClassesResponse&gt;"/> </returns>
-        public Task<(List<ClassesResponse> classes, ResultCodes resultCode, string clientMessage)> GetClassAsync();
+        public Task<(List<ClassesResponse> classes, ResultCodes resultCode)> GetClassAsync();
 
         /// <summary>
         /// Gets List of Classes.
@@ -49,7 +49,8 @@ namespace Attendance.Web.Api.Interfaces
         /// <param name="filterByClassId">filter by class.</param>
         /// <param name="filterStudentId">filter by specific student.</param>
         /// <returns><see cref="List&lt;RegisteredStudents&gt;"/> </returns>
-        public Task<(List<RegisteredStudents> classes, ResultCodes resultCode, string clientMessage)>GetRegisteredStudentsAsync(int filterByClassId = -1, int filterStudentId = -1);
+        public Task<(List<RegisteredStudents> classes, ResultCodes resultCode)> GetRegisteredStudentsAsync(
+            int filterByClassId = -1, int filterStudentId = -1);
 
         /// <summary>
         /// Gets list of all available teachers
@@ -69,6 +70,6 @@ namespace Attendance.Web.Api.Interfaces
         /// Returns period report result.
         /// </summary>
         /// <returns><see cref="PeriodReportResult"/> </returns>
-        public Task<(List<PeriodReportResult> classes, ResultCodes resultCode, string clientMessage)> PeriodReportAsync(PeriodRequest period);
+        public Task<(List<PeriodReportResult> classes, ResultCodes resultCode)> PeriodReportAsync(PeriodRequest period);
     }
 }

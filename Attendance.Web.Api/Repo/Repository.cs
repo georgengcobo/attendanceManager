@@ -38,13 +38,13 @@ namespace Attendance.Web.Api.Repo
 
 
         /// <inheritdoc/>
-        public async Task<Teacher> GetUserDetailsByEmailAsync(string emailAddress)
+        public async Task<(Teacher, ResultCodes code)> GetUserDetailsByEmailAsync(string emailAddress)
         {
             var queryParams = new { UserEmail = emailAddress };
             var query = $"SELECT * FROM {DatabaseTables.Database}{DatabaseTables.DbSchema}{DatabaseTables.TeachersTable} WHERE Email = @UserEmail";
 
-            var (user, _ ) =  await this.TryQueryDbAsync<Teacher>(query, queryParams).ConfigureAwait(false);
-            return user.FirstOrDefault();
+            var (result, code) =  await this.TryQueryDbAsync<Teacher>(query, queryParams).ConfigureAwait(false);
+            return (result.FirstOrDefault(), code);
         }
 
         /// <inheritdoc/>
@@ -72,16 +72,18 @@ namespace Attendance.Web.Api.Repo
             return (insertId, resultCode == ResultCodes.OkResult );
         }
 
-        public async Task<Student> GetStudentDetailsByIdNumberAsync(string identityNumber)
+        /// <inheritdoc />
+        public async Task<(Student, ResultCodes code)> GetStudentDetailsByIdNumberAsync(string identityNumber)
         {
             var parameters = new { Param1 = identityNumber };
             var query = $"SELECT * FROM {DatabaseTables.Database}{DatabaseTables.DbSchema}{DatabaseTables.StudentsTable} WHERE IdNumber = @Param1";
 
-            var (student, _) = await this.TryQueryDbAsync<Student>(query, parameters).ConfigureAwait(false);
+            var (result, code) = await this.TryQueryDbAsync<Student>(query, parameters).ConfigureAwait(false);
 
-            return student.FirstOrDefault();
+            return (result.FirstOrDefault(), code);
         }
 
+        /// <inheritdoc />
         public async Task<bool> CreateNewStudentAsync(AddStudent newStudent)
         {
             var query = new StringBuilder();
@@ -106,6 +108,7 @@ namespace Attendance.Web.Api.Repo
             return (resultCode == ResultCodes.OkResult);
         }
 
+        /// <inheritdoc />
         public async Task<bool> CreateNewClassAsync(AddClass newClass)
         {
             var query = new StringBuilder();
@@ -130,39 +133,44 @@ namespace Attendance.Web.Api.Repo
             return (resultCode == ResultCodes.OkResult);
         }
 
-        public async Task<Classes> GetClassDetailsAsync(AddClass targetClass)
+        /// <inheritdoc />
+        public async Task<(Classes, ResultCodes code)> GetClassDetailsAsync(AddClass targetClass)
         {
             var parameters = new { Param1 = targetClass.ClassName, Param2 = targetClass.Grade, Param3 = targetClass.TeacherId };
             var query = $"SELECT * FROM {DatabaseTables.Database}{DatabaseTables.DbSchema}{DatabaseTables.ClassesTable} WHERE ClassName = @Param1 AND Grade = @Param2 AND TeacherId = @Param3";
 
-            var (result, _) = await this.TryQueryDbAsync<Classes>(query, parameters).ConfigureAwait(false);
+            var (result, code) = await this.TryQueryDbAsync<Classes>(query, parameters).ConfigureAwait(false);
 
-            return result.FirstOrDefault();
+            return (result.FirstOrDefault(), code);
         }
 
-        public async Task<Classes> GetClassDetailsByIdAsync(int classId)
+        /// <inheritdoc />
+        public async Task<(Classes, ResultCodes code)> GetClassDetailsByIdAsync(int classId)
         {
             var parameters = new { Param1 = classId };
             var query = $"SELECT * FROM {DatabaseTables.Database}{DatabaseTables.DbSchema}{DatabaseTables.ClassesTable} WHERE ClassId = @Param1";
 
-            var (result, _) = await this.TryQueryDbAsync<Classes>(query, parameters).ConfigureAwait(false);
+            var (result, code) = await this.TryQueryDbAsync<Classes>(query, parameters).ConfigureAwait(false);
 
-            return result.FirstOrDefault();
+            return (result.FirstOrDefault(), code);
         }
 
-        public async Task<List<ClassesResponse>> GetAllClassesAsync()
+        /// <inheritdoc />
+        public async Task<(List<ClassesResponse>, ResultCodes code)> GetAllClassesAsync()
         {
             var query = new StringBuilder();
              query.AppendLine($" SELECT C.*, CONCAT(T.Name,' ' ,T.Surname)AS TeacherName FROM {DatabaseTables.Database}{DatabaseTables.DbSchema}{DatabaseTables.ClassesTable} C ");
              query.AppendLine($" JOIN {DatabaseTables.Database}{DatabaseTables.DbSchema}{DatabaseTables.TeachersTable} T ");
              query.AppendLine(" ON C.TeacherId = T.TeacherId ");
 
-            var (result, _) = await this.TryQueryDbAsync<ClassesResponse>(query.ToString(), null).ConfigureAwait(false);
+            var (result, code) = await this.TryQueryDbAsync<ClassesResponse>(query.ToString(), null).ConfigureAwait(false);
 
-            return result.ToList();
+            return (result.ToList(), code);
         }
 
-        public async Task<List<RegisteredStudents>> GetAllRegisteredStudentsAsync(int filterByClassId = -1, int filterByStudentId = -1)
+        /// <inheritdoc />
+        public async Task<(List<RegisteredStudents>, ResultCodes code)> GetAllRegisteredStudentsAsync(
+            int filterByClassId = -1, int filterByStudentId = -1)
         {
             var query = new StringBuilder();
 
@@ -197,11 +205,37 @@ namespace Attendance.Web.Api.Repo
                 parameters = new { Param1 = filterByStudentId };
             }
 
-            var (result, _) = await this.TryQueryDbAsync<RegisteredStudents>(query.ToString(), parameters).ConfigureAwait(false);
+            var (result, code) = await this.TryQueryDbAsync<RegisteredStudents>(query.ToString(), parameters).ConfigureAwait(false);
 
-            return result.ToList();
+            return (result.ToList(), code);
         }
 
+        /// <inheritdoc />
+        public async Task<(List<PeriodReportResult>, ResultCodes)> GetPeriodReportAsync(PeriodRequest period)
+        {
+            var query = new StringBuilder();
+
+            query.Append("SELECT A.AttendanceDatetime As AttendanceDate, ");
+            query.AppendLine(" C.ClassName, C.Grade, CONCAT(S.Name, ' ' ,S.Surname) AS Student, S.IdNumber, A.IsPresent, ");
+            query.AppendLine(" CONCAT(T.Name, ' ' , T.Surname) AS MarkedBy ");
+            query.AppendLine($" FROM {DatabaseTables.Database}{DatabaseTables.DbSchema}{DatabaseTables.AttendanceTable} A ");
+            query.AppendLine($" JOIN {DatabaseTables.Database}{DatabaseTables.DbSchema}{DatabaseTables.RegistrationsTable} R ");
+            query.AppendLine(" ON A.RegistrationId = R.RegistrationId ");
+            query.AppendLine($" JOIN {DatabaseTables.Database}{DatabaseTables.DbSchema}{DatabaseTables.TeachersTable} T ");
+            query.AppendLine(" ON A.TeacherId = T.TeacherId ");
+            query.AppendLine($" JOIN {DatabaseTables.Database}{DatabaseTables.DbSchema}{DatabaseTables.ClassesTable} C ");
+            query.AppendLine(" ON C.ClassId =  R.ClassId ");
+            query.AppendLine($" JOIN {DatabaseTables.Database}{DatabaseTables.DbSchema}{DatabaseTables.StudentsTable} S ");
+            query.AppendLine(" ON S.StudentId = R.StudentId ");
+            query.AppendLine(" WHERE  A.AttendanceDatetime >= @Param1 AND A.AttendanceDatetime <= @Param2");
+
+            var parameters = new { Param1 = period.StartDateTime, @Param2 = period.EndDateTime };
+            var (result, code) = await this.TryQueryDbAsync<PeriodReportResult>(query.ToString(), parameters).ConfigureAwait(false);
+
+            return (result.ToList(), code);
+        }
+
+        /// <inheritdoc />
         public async Task<List<Student>> GetStudentDetailsByKeyAsync(int studentKey = -1)
         {
             object parameters = null;
@@ -222,6 +256,7 @@ namespace Attendance.Web.Api.Repo
             return result.ToList();
         }
 
+        /// <inheritdoc />
         public async Task<Registration> GetRegistrationDetailsAsync(ClassRegistration registration)
         {
             var parameters = new { Param1 = registration.ClassId, Param2 = registration.StudentId};
@@ -232,6 +267,7 @@ namespace Attendance.Web.Api.Repo
             return result.FirstOrDefault();
         }
 
+        /// <inheritdoc />
         public async Task<bool> CreateNewRegistrationAsync(ClassRegistration registration)
         {
             var query = new StringBuilder();
@@ -255,6 +291,7 @@ namespace Attendance.Web.Api.Repo
             return (resultCode == ResultCodes.OkResult);
         }
 
+        /// <inheritdoc />
         public async Task<Registration> GetStudentRegistrationByKeyAsync(int registrationKey)
         {
             var parameters = new { Param1 = registrationKey };
@@ -265,6 +302,7 @@ namespace Attendance.Web.Api.Repo
             return result.FirstOrDefault();
         }
 
+        /// <inheritdoc />
         public async Task<List<Teacher>> GetTeacherDetailsByKeyAsync(int teacherId = -1)
         {
             object parameters = null;
@@ -282,17 +320,19 @@ namespace Attendance.Web.Api.Repo
             return result.ToList();
         }
 
+        /// <inheritdoc />
         public async Task<AttendanceRecord> GetAttendanceRecordDetailsAsync(AddAttendance attendance)
         {
             var dateOfAttendance = attendance.AttendanceDate.Date.ToString("yyyy-MM-dd");
-            var parameters = new { Param1 = dateOfAttendance, Param2 = attendance.RegistrationId, Param3 = attendance.TeacherId};
-            var query = $"SELECT * FROM {DatabaseTables.Database}{DatabaseTables.DbSchema}{DatabaseTables.AttendanceTable} WHERE DATE(AttendanceDatetime) = @Param1 AND RegistrationId = @Param2 AND TeacherId = @Param3";
+            var parameters = new { Param1 = dateOfAttendance, Param2 = attendance.RegistrationId};
+            var query = $"SELECT * FROM {DatabaseTables.Database}{DatabaseTables.DbSchema}{DatabaseTables.AttendanceTable} WHERE DATE(AttendanceDatetime) = @Param1 AND RegistrationId = @Param2";
 
             var (result, _) = await this.TryQueryDbAsync<AttendanceRecord>(query, parameters).ConfigureAwait(false);
 
             return result.FirstOrDefault();
         }
 
+        /// <inheritdoc />
         public async Task<AttendanceRecord> GetAttendanceRecordAsync(AddAttendance attendance)
         {
             var dateOfAttendance = attendance.AttendanceDate.Date;
@@ -304,6 +344,7 @@ namespace Attendance.Web.Api.Repo
             return result.FirstOrDefault();
         }
 
+        /// <inheritdoc />
         public async Task<bool> AddAttendanceRecordAsync(AddAttendance marRegister)
         {
             var query = new StringBuilder();
@@ -314,7 +355,7 @@ namespace Attendance.Web.Api.Repo
             query.Append(DatabaseTables.AttendanceTable);
             query.AppendLine(" ");
             query.AppendLine(" (AttendanceDatetime, RegistrationId, TeacherId, IsPresent) ");
-            query.AppendLine(" VALUES (@Param1, @Param2, @Param3, @Param3); ");
+            query.AppendLine(" VALUES (@Param1, @Param2, @Param3, @Param4); ");
             query.AppendLine(" select LAST_INSERT_ID(); ");
 
             var queryParams = new

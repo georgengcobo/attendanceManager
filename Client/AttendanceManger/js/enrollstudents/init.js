@@ -23,7 +23,10 @@ $(document).ready(function () {
   $.get(StudentRequestSettings, function (response) {
     console.log("Entire Response : ", response);
 
-    var t = $("#Students").DataTable();
+    var t = $("#Students").DataTable({
+      retrieve: true,
+      responsive: true,
+    });
     t.clear();
     t.draw();
 

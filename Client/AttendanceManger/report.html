@@ -61,14 +61,14 @@
                             <div class="row">
                                 <div class="col-lg-3">
                                     <label class="col-lg-3 control-label" for="Name">Start Date</label>
-                                    <input class="form-control" type="datetime-local" id="AttendanceDate"
-                                        name="AttendanceDate" required />
+                                    <input class="form-control" type="datetime-local" id="StartDate"
+                                        name="StartDate" required />
                                 </div>
                              
                                 <div class="col-lg-3">
                                     <label class="col-lg-3 control-label" for="Name">End Date</label>
-                                    <input class="form-control" type="datetime-local" id="AttendanceDate"
-                                        name="AttendanceDate" required />
+                                    <input class="form-control" type="datetime-local" id="EndDate"
+                                        name="EndDate" required />
                             </div>
                         </div>
                         <br />
@@ -84,7 +84,7 @@
                         <br />
                         <div id="Reporting" style="display: none">
                             <div class="table-responsive-sm">
-                                <table id="RegisteredClasses" class="table table-striped">
+                                <table id="PeriodReportTbl" class="table table-striped">
                                     <thead>
                                         <tr>
                                             <th scope="col">Date</th>
@@ -92,7 +92,7 @@
                                             <th scope="col">Grade</th>
                                             <th scope="col">Student</th>
                                             <th scope="col">Id Number</th>
-                                            <th scope="col">Teacher</th>
+                                            <th scope="col">MarkedBy</th>
                                             <th scope="col">Present</th>
                                         </tr>
                                     </thead>

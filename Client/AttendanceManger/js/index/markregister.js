@@ -23,14 +23,20 @@ function MarkRegister(classId) {
 
   $.ajax(registeredStudentsSettings)
     .done(function (response) {
-      console.log("Entire Response : ", response);
-
       var t = $("#MarkRegisterTbl").DataTable({
+        retrieve: true,
         responsive: true,
       });
 
       t.clear();
       t.draw();
+
+      
+      if(response.registeredStudents.length == 0){
+
+        alert("This class has no students registered to it yet !");
+        return;
+      }
 
       $.each(response.registeredStudents, function (index, element) {
         var attendaceOptions =

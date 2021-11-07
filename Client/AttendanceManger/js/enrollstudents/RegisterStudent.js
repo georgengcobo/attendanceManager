@@ -39,7 +39,10 @@ function RegisterStudent(studentId) {
   var activeClasses = [];
   $.get(StudentRequestSettings, function (response) {
     console.log("Entire Response : ", response);
-    var t = $("#registeredClasses").DataTable();
+    var t = $("#registeredClasses").DataTable({
+      retrieve: true,
+      responsive: true,
+    });
     t.clear();
     t.draw();
 

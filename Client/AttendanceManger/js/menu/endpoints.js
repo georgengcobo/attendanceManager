@@ -18,6 +18,7 @@ window.onload = function () {
     const addClass = "/Admin/AddClass";
     const enrollStudent = "/Admin/Enroll";
     const recordAttendance = "/Admin/Attendance";
+    const generatePeriodReport = "/Admin/Reports/PeriodReport";
     var endpointDictionary = {};
     // map menu items to json object here
     endpointDictionary["BaseUrl"] = baseUrl;
@@ -36,6 +37,7 @@ window.onload = function () {
     endpointDictionary["POST_AddClass"] = addClass;
     endpointDictionary["POST_EnrollStudent"] = enrollStudent;
     endpointDictionary["POST_RecordAttendance"] = recordAttendance;
+    endpointDictionary["POST_PeriodReport"] = generatePeriodReport;
     sessionStorage.setItem("EndPoints", JSON.stringify(endpointDictionary));
   }
 };

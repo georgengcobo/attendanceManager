@@ -31,18 +31,23 @@ namespace Attendance.Web.Api.Services
             this._httpContextAccessor = httpContextAccessor;
         }
 
-      
+
+        /// <inheritdoc />
         public async Task<(ResultCodes resultCode, string clientMessage)> AddStudentAsync(AddStudent newStudent)
         {
-            var targetStudent = await this._repo.GetStudentDetailsByIdNumberAsync(newStudent.IdNumber).ConfigureAwait(false);
+            var (targetStudent, resultCode) = await this._repo.GetStudentDetailsByIdNumberAsync(newStudent.IdNumber).ConfigureAwait(false);
 
-            if (targetStudent.Equals(default(Student)))
+            if (targetStudent.Equals(default(Student)) && resultCode == ResultCodes.OkResult)
             {
-                var teacherId = int.Parse(this._httpContextAccessor.HttpContext?.User.Claims.First(x => x.Type == "UserId").Value ?? string.Empty);
-
+                
                 var result = await this._repo.CreateNewStudentAsync(newStudent).ConfigureAwait(false);
 
                 return result ? (ResultCodes.OkResult, "Student Created Ok") : (ResultCodes.UnexpectedOperationException, "Error creating student in database");
+            }
+
+            if (resultCode != ResultCodes.OkResult)
+            {
+                return (resultCode, "System level exception detected");
             }
 
             var msg = $"Student With that IDNumber already exists: {newStudent.IdNumber}";
@@ -51,24 +56,29 @@ namespace Attendance.Web.Api.Services
 
         }
 
+        /// <inheritdoc />
         public async Task<(ResultCodes resultCode, string clientMessage)> AddClassAsync(AddClass newClass)
         {
-            var targetClass = await this._repo.GetClassDetailsAsync(newClass).ConfigureAwait(false);
+            var (targetClass  ,resultCode) = await this._repo.GetClassDetailsAsync(newClass).ConfigureAwait(false);
 
             var targetTeacher = await this._repo.GetTeacherDetailsByKeyAsync(newClass.TeacherId).ConfigureAwait(false);
 
             if (targetTeacher.FirstOrDefault().Equals(default(Teacher)))
             {
-
                 this._logging.LogWarning((int)ResultCodes.UserNotFoundException, "Specified Teacher does not exists");
                 return (ResultCodes.UserNotFoundException, "Specified Teacher does not exists");
             }
 
-            if (targetClass.Equals(default(Classes)))
+            if (targetClass.Equals(default(Classes)) && resultCode == ResultCodes.OkResult)
             {
                 var result = await this._repo.CreateNewClassAsync(newClass).ConfigureAwait(false);
 
                 return result ? (ResultCodes.OkResult, "Class Created Ok") : (ResultCodes.UnexpectedOperationException, "Error creating Class in database");
+            }
+
+            if (resultCode != ResultCodes.OkResult)
+            {
+                return (resultCode, "System level exception detected");
             }
 
             const string msg = "Specified class already exists";
@@ -76,9 +86,10 @@ namespace Attendance.Web.Api.Services
             return (ResultCodes.DuplicateRecordException, msg);
         }
 
+        /// <inheritdoc />
         public async Task<(ResultCodes resultCode, string clientMessage)> RegisterInClassAsync(ClassRegistration newRegistrations)
         {
-            var targetClass = await this._repo.GetClassDetailsByIdAsync(newRegistrations.ClassId).ConfigureAwait(false);
+            var (targetClass, resultCode) = await this._repo.GetClassDetailsByIdAsync(newRegistrations.ClassId).ConfigureAwait(false);
             var students = await this._repo.GetStudentDetailsByKeyAsync(newRegistrations.StudentId).ConfigureAwait(false);
             var targetStudent = students.FirstOrDefault();
 
@@ -97,15 +108,23 @@ namespace Attendance.Web.Api.Services
                 return (ResultCodes.DuplicateRecordException, "Student Already registered for this class");
             }
 
+            if (resultCode != ResultCodes.OkResult)
+            {
+                return (resultCode, "System level exception detected");
+            }
+
             var result = await this._repo.CreateNewRegistrationAsync(newRegistrations).ConfigureAwait(false);
 
             return result ? (ResultCodes.OkResult, "Student registered for class") : (ResultCodes.UnexpectedOperationException, "Error creating Registration in database");
         }
 
+        /// <inheritdoc />
         public async Task<(ResultCodes resultCode, string clientMessage)> CaptureAttendanceAsync(AddAttendance marRegister)
         {
             var targetRegistration = await this._repo.GetStudentRegistrationByKeyAsync(marRegister.RegistrationId).ConfigureAwait(false);
-            var targetTeachers = await this._repo.GetTeacherDetailsByKeyAsync(marRegister.TeacherId).ConfigureAwait(false);
+
+            var teacherId = int.Parse(this._httpContextAccessor.HttpContext?.User.Claims.First(x => x.Type == "UserId").Value ?? string.Empty);
+            var targetTeachers = await this._repo.GetTeacherDetailsByKeyAsync(teacherId).ConfigureAwait(false);
             var targetTeacher = targetTeachers.FirstOrDefault();
 
             if (targetTeacher.Equals(default(Teacher)) || targetRegistration.Equals(default(Registration)))
@@ -128,20 +147,24 @@ namespace Attendance.Web.Api.Services
             return (ResultCodes.DuplicateRecordException, "Student attendance already marked for class");
         }
 
-        public async Task<(List<ClassesResponse> classes, ResultCodes resultCode, string clientMessage)> GetClassAsync()
+        /// <inheritdoc />
+        public async Task<(List<ClassesResponse> classes, ResultCodes resultCode)> GetClassAsync()
         {
-            var result = await this._repo.GetAllClassesAsync().ConfigureAwait(false);
-
-            return (result, ResultCodes.OkResult, "OK");
+            var (result, resultCode) = await this._repo.GetAllClassesAsync().ConfigureAwait(false);
+  
+            return (result, resultCode);
         }
 
-        public async Task<(List<RegisteredStudents> classes, ResultCodes resultCode, string clientMessage)> GetRegisteredStudentsAsync(int filterByClassId = -1, int filterStudentId = -1)
+        /// <inheritdoc />
+        public async Task<(List<RegisteredStudents> classes, ResultCodes resultCode)> GetRegisteredStudentsAsync(
+            int filterByClassId = -1, int filterStudentId = -1)
         {
-            var result = await this._repo.GetAllRegisteredStudentsAsync(filterByClassId, filterStudentId).ConfigureAwait(false);
+            var (result, resultCode) = await this._repo.GetAllRegisteredStudentsAsync(filterByClassId, filterStudentId).ConfigureAwait(false);
 
-            return (result, ResultCodes.OkResult, "Ok");
+            return (result, resultCode);
         }
 
+        /// <inheritdoc />
         public async Task<(List<TeacherResponse> classes, ResultCodes resultCode, string clientMessage)> GetTeachersAsync(int teacherId = -1)
         {
             var result = await this._repo.GetTeacherDetailsByKeyAsync(teacherId).ConfigureAwait(false);
@@ -151,6 +174,7 @@ namespace Attendance.Web.Api.Services
             return (teachers, ResultCodes.OkResult, "Ok");
         }
 
+        /// <inheritdoc />
         public async Task<(List<Student> classes, ResultCodes resultCode, string clientMessage)> GetStudentsAsync(int studentId = -1)
         {
             var result = await this._repo.GetStudentDetailsByKeyAsync(studentId).ConfigureAwait(false);
@@ -158,11 +182,12 @@ namespace Attendance.Web.Api.Services
             return (result, ResultCodes.OkResult, "Ok");
         }
 
-        public Task<(List<PeriodReportResult> classes, ResultCodes resultCode, string clientMessage)> PeriodReportAsync(PeriodRequest period)
+        /// <inheritdoc />
+        public async Task<(List<PeriodReportResult> classes, ResultCodes resultCode)> PeriodReportAsync(PeriodRequest period)
         {
-            var result = await this._repo.GetPeriodReportAsync(period).ConfigureAwait(false);
+            var (result, resultCode) = await this._repo.GetPeriodReportAsync(period).ConfigureAwait(false);
 
-            return (result, ResultCodes.OkResult, "Ok");
+            return (result, resultCode);
         }
     }
 }
