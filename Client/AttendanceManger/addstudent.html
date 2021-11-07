@@ -37,6 +37,7 @@
     <script src="js/menu/endpoints.js"></script>
     <script src="js/menu/menu.js"></script>
     <script src="js/menu/init.js"></script>
+    <script src="js/addstudent/init.js"></script>
 
     <!-- Loader CSS -->
     <style>
@@ -127,8 +128,6 @@
                   </div>
                 </div>
                 <br />
-                <br />
-
                 <button
                   type="submit"
                   id="CreateProduct"
@@ -140,6 +139,23 @@
                   Cancel
                 </button>
               </form>
+
+              <header>
+                <h2>existing Students</h2>
+            </header>
+            <div class="table-responsive-sm">
+                <table id="Students" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Registration Date</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">IdNumber</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
             </div>
           </section>
         </div>

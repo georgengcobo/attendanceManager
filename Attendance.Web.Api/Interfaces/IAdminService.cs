@@ -42,7 +42,7 @@ namespace Attendance.Web.Api.Interfaces
         /// Gets List of Classes.
         /// </summary>
         /// <returns>classes</returns>
-        public Task<(List<Classes> classes, ResultCodes resultCode, string clientMessage)> GetClassAsync();
+        public Task<(List<ClassesResponse> classes, ResultCodes resultCode, string clientMessage)> GetClassAsync();
 
         /// <summary>
         /// Gets List of Classes.

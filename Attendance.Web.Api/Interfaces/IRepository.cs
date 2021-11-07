@@ -123,7 +123,7 @@ namespace Attendance.Web.Api.Interfaces
         /// Gets list of classes.
         /// </summary>
         /// <returns>returns list of classes.</returns>
-        public Task<List<Classes>> GetAllClassesAsync();
+        public Task<List<ClassesResponse>> GetAllClassesAsync();
 
         /// <summary>
         /// Gets list of registered users.

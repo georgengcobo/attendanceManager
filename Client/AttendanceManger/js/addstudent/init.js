@@ -1,21 +1,15 @@
 $(document).ready(function () {
 
-  $("#Teacher").empty();
-  $("#Teacher").append(new Option("-- Select Teacher --", -1));
-
-  GetExistingClasses();
-  
-  var teacherId = -1;
+  var StudentId = -1;
 
   var baseUri = GenerateEndpoint("BaseUri");
 
-  const regUri = `/Admin/Teachers/${teacherId}`;
+  const regUri = `/Admin/Students/${StudentId}`;
 
   var uri = baseUri + regUri;
-
   var token = sessionStorage.getItem("token");
 
-  var TeachersRequestSettings = {
+  var StudentRequestSettings = {
     async: true,
     crossDomain: true,
     url: uri,
@@ -27,13 +21,17 @@ $(document).ready(function () {
     },
   };
 
-  $.get(TeachersRequestSettings, function (response) {
+  $.get(StudentRequestSettings, function (response) {
     console.log("Entire Response : ", response);
 
-    $.each(response.teachers, function (index, element) {
-      $("#Teacher").append(
-        new Option(element.fullName, element.teacherId)
-      );
+    var t = $("#Students").DataTable();
+    t.clear();
+    t.draw();
+
+    $.each(response.students, function (index, element) {
+
+      var studentNames = element.name + " " + element.surname;
+      t.row.add([element.dateTimeAdded , studentNames, element.idNumber]).draw(false);
     });
   }).fail(function (data, textStatus, xhr) {
     ManageException(

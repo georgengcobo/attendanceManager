@@ -78,24 +78,24 @@
 
               <form id="CreateClassForm">
                 <div class="form-group">
-                  <label class="col-lg-2 control-label" for="name"
+                  <label class="col-lg-2 control-label" for="ClassName"
                     >Classe Name</label
                   >
                   <div class="col-lg-3">
                     <input
                       class="form-control"
                       autocomplete="off"
-                      id="name"
-                      name="name"
+                      id="ClassName"
+                      name="ClassName"
                       type="text"
-                      placeholder="class Name"
+                      placeholder="Class Name"
                       required
                     />
                   </div>
                 </div>
 
                 <div class="form-group">
-                  <label class="col-lg-2 control-label" for="grade"
+                  <label class="col-lg-2 control-label" for="Grade"
                     >Grade</label
                   >
                   <div class="col-lg-2">
@@ -103,25 +103,25 @@
                       class="form-control"
                       size="6"
                       autocomplete="off"
-                      id="grade"
-                      name="grade"
+                      id="Grade"
+                      name="Grade"
                       type="text"
-                      placeholder="grade"
+                      placeholder="Grade"
                       required
                     />
                   </div>
                 </div>
 
                 <div class="form-group">
-                  <label class="col-lg-2 control-label" for="teacher"
+                  <label class="col-lg-2 control-label" for="Teacher"
                     >Teacher</label
                   >
                   <div class="col-lg-3">
                     <select
                       class="form-control"
-                      name="teacher"
-                      id="teacher"
-                      placeholder="teacher"
+                      name="Teacher"
+                      id="Teacher"
+                      placeholder="Teacher"
                       required
                     >
                       <option disabled selected value="-1">
@@ -130,17 +130,36 @@
                     </select>
                   </div>
                 </div>
-
-                <br />
                 <br />
 
+                <div class="form-group">
                 <button type="submit" id="createclass" class="btn btn-primary">
                   Create Class
                 </button>
                 <button type="button" id="cancel" class="btn btn-default">
                   Cancel
                 </button>
+              </div>
               </form>
+
+              <br />
+              <header>
+                <h2>Existing classes</h2>
+              </header>
+              <div class="table-responsive-sm">
+                <table id="ExistingClassesTbl" class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th scope="col">Class Name</th>
+                      <th scope="col">Grade</th>
+                      <th scope="col">Teacher</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+
+
             </div>
           </section>
         </div>
@@ -165,6 +184,5 @@
     </div>
   </body>
 </html>
-
-<script src="js/addclass/validation.js"></script>
-<script src="js/addclass/createcategory.js"></script>
+<script src="js/addclass/existingclasses.js"></script>
+<script src="js/addclass/submitclass.js"></script>

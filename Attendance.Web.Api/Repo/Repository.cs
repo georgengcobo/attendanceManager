@@ -150,11 +150,14 @@ namespace Attendance.Web.Api.Repo
             return result.FirstOrDefault();
         }
 
-        public async Task<List<Classes>> GetAllClassesAsync()
+        public async Task<List<ClassesResponse>> GetAllClassesAsync()
         {
-            var query = $"SELECT * FROM {DatabaseTables.Database}{DatabaseTables.DbSchema}{DatabaseTables.ClassesTable}";
+            var query = new StringBuilder();
+             query.AppendLine($" SELECT C.*, CONCAT(T.Name,' ' ,T.Surname)AS TeacherName FROM {DatabaseTables.Database}{DatabaseTables.DbSchema}{DatabaseTables.ClassesTable} C ");
+             query.AppendLine($" JOIN {DatabaseTables.Database}{DatabaseTables.DbSchema}{DatabaseTables.TeachersTable} T ");
+             query.AppendLine(" ON C.TeacherId = T.TeacherId ");
 
-            var (result, _) = await this.TryQueryDbAsync<Classes>(query, null).ConfigureAwait(false);
+            var (result, _) = await this.TryQueryDbAsync<ClassesResponse>(query.ToString(), null).ConfigureAwait(false);
 
             return result.ToList();
         }

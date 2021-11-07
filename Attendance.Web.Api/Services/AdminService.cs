@@ -127,7 +127,7 @@ namespace Attendance.Web.Api.Services
             return (ResultCodes.DuplicateRecordException, "Student attendance already marked for class");
         }
 
-        public async Task<(List<Classes> classes, ResultCodes resultCode, string clientMessage)> GetClassAsync()
+        public async Task<(List<ClassesResponse> classes, ResultCodes resultCode, string clientMessage)> GetClassAsync()
         {
             var result = await this._repo.GetAllClassesAsync().ConfigureAwait(false);
 

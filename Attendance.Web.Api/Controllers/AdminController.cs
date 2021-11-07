@@ -101,7 +101,7 @@ namespace Attendance.Web.Api.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet]
         [Route("Classes")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<RegisteredStudents>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<ClassesResponse>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetClasses()
         {
@@ -131,7 +131,7 @@ namespace Attendance.Web.Api.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet]
         [Route("Teachers/{teacherId}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<RegisteredStudents>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<TeacherResponse>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Teachers(int teacherId = -1)
         {

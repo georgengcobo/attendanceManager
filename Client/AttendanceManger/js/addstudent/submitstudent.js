@@ -1,6 +1,12 @@
 $("#CreateStudntForm").submit(function (event) {
   event.preventDefault();
 
+  if($("#IdNumber").val().length !== 13){
+
+    alert("Please provide 13 Digit Id number")
+    return;
+  }
+  
   var studentRequest = new Object();
   studentRequest.Name = $("#Name").val();
   studentRequest.Surname = $("#Surname").val();
@@ -29,8 +35,12 @@ $("#CreateStudntForm").submit(function (event) {
 
     $.ajax(userSettings)
       .done(function (response) {
-        console.log(response);
-        alert("Student Created Ok");
+        var r = confirm("Would You Like to add another Student ?");
+        if (r == true) {
+          window.location.replace("addstudent.html");
+        } else {
+          window.location.replace("index.html");
+        }
       })
       .fail(function (data, textStatus, xhr) {
         console.log(data);
